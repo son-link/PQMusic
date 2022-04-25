@@ -21,7 +21,7 @@ setup(
             'icons/luv-icon-theme'
         ]
     },
-    download_url='https://github.com/son-link/PQMusic/archive/0.1.0.tar.gz',
+    download_url='https://github.com/son-link/PQMusic/archive/refs/tags/v.0.1.0.tar.gz',
     keywords=['music', 'audio', 'player'],
     install_requires=[
         'pyqt5',
