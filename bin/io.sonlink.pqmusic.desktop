@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PQMusic
+Comment=A minimal audio player
+Exec=pqmusic
+Terminal=false
+Type=Application
+Icon=pqmusic
+Categories=AudioVideo;Audio;

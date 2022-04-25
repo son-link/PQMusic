@@ -1,0 +1,15 @@
+__pycache__
+build
+dist
+*.egg-info
+AppDir
+*.egg*
+_temp_home
+*.exe
+*.AppImage
+packages/
+.qt_for_python/
+.vscode
+*.bck
+icons/luv-icon-theme
+examples

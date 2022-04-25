@@ -1,0 +1,10 @@
+[Icon Theme]
+Name=Lüv
+Comment=Lüv is an icon theme for freedesktop environments.
+
+[actions/22]
+Size=22
+Context=Actions
+Type=Scalable
+MinSize=22
+MaxSize=256
