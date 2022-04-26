@@ -1,37 +1,58 @@
-## Welcome to GitHub Pages
+# PQMusic
 
-You can use the [editor on GitHub](https://github.com/son-link/PQMusic/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![](https://img.shields.io/github/license/son-link/PQMusic)
+![](https://img.shields.io/github/downloads/son-link/PQMusic/total)
+![](https://img.shields.io/github/stars/son-link/PQMusic)
+![](https://img.shields.io/pypi/v/PQMusic)
+![](https://img.shields.io/pypi/dm/PQMusic?label=downloas%20on%20PyPi)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+[https://github.com/son-link/PQMusic](https://github.com/son-link/PQMusic)
 
-### Markdown
+![PQMusic screenshoot](screenshoot.jpg)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+PQMusic is a minimalistic and easy to use audio player for download and use.
 
-```markdown
-Syntax highlighted code block
+Available for Linux (Not available for Windows at the moment)
 
-# Header 1
-## Header 2
-### Header 3
+Licensed under GNU/GPL3 or higher.
 
-- Bulleted
-- List
+**Note**: this project is still under development, so some features are not yet available or complete.
 
-1. Numbered
-2. List
+## Install
 
-**Bold** and _Italic_ and `Code` text
+### From source code:
 
-[Link](url) and ![Image](src)
-```
+* Clone the repo, download the zip under Code -> Download ZIP or download the last release.
+* Open a terminal and go to the project folder.
+* Install the dependencies:
+  * **From PIP** (with administration permissions): `pip install -r requirements.txt`
+  * **Debian/Ubuntu/Mint/MX Linux**:
+    * apt: `apt install python3-pyqt5, python3-pyqt5.qtmultimedia, libqt5multimedia5, libqt5multimedia5-plugins`
+    * Pypi: `pip3 install mutagen`
+  * **Arch Linux/Manjaro**:
+    * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia`
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+  * Copy the icon and desktop file:
+    * All users:
+      * `install -m 644 bin/io.sonlink.pqmusic.desktop /usr/share/applications`
+  	  * `install -m 644 bin/io.sonlink.pqmusic.svg /usr/share/icons/pqmusic.svg`
+  	* Current user:
+  	  * `cp bin/io.sonlink.pqmusic.desktop ~/.local/share/applications`
+  	  * `cp bin/io.sonlink.pqmusic.svg ~/.icons/pqmusic.svg`
 
-### Jekyll Themes
+### From Pypi:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/son-link/PQMusic/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+`pip install PQMusic`
 
-### Support or Contact
+### Executables:
+You can download a **AppImage** for **GNU/Linux** on [releases page](https://github.com/son-link/PQMusic/releases)
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Other credits:
+
+* Lüv icons theme: https://github.com/Nitrux/luv-icon-theme
+
+* Open Sans font: https://fonts.google.com/specimen/Open+Sans
+
+* [QssStylesheetEditor](https://github.com/hustlei/QssStylesheetEditor) for make the app theme
+
+* Musical note use in the app icon: https://openclipart.org/detail/110599/musical-note-2-dennis-b-01r
