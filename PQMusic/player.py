@@ -3,13 +3,11 @@ from PyQt5.QtMultimedia import (
     QMediaPlaylist,
     QMediaContent,
     QMediaMetaData,
-    QAudioDecoder
 )
 from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
-from PyQt5.QtGui import QIcon, QPixmap, QStandardItem, QFont
+from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from pathlib import Path
-from .utils import getMetaData
-from pathlib import Path
+from .utils import getMetaData, getMetaDataUrl
 
 import magic
 
@@ -65,6 +63,22 @@ class Player(QMediaPlayer):
             self.parent.playButton.setEnabled(True)
             self.parent.timeSlider.setEnabled(True)
             self.parent.queueNextButton.setEnabled(True)
+
+    def addUrl(self, url, mimetype):
+        self.queueList.addMedia(QMediaContent(QUrl(url)))
+        tags = getMetaDataUrl(url, mimetype)
+        if tags['notags']:
+            item = QStandardItem(tags['notags'])
+        else:
+            item = QStandardItem('{} - {}'.format(
+                tags['artist'],
+                tags['title']
+            ))
+
+        self.parent.plModel.appendRow(item)
+        self.parent.playButton.setEnabled(True)
+        self.parent.timeSlider.setEnabled(True)
+        self.parent.queueNextButton.setEnabled(True)
 
     def playPause(self):
         icon = QIcon.fromTheme("media-playback-pause")
@@ -176,7 +190,10 @@ class Player(QMediaPlayer):
     def changePos(self, pos):
         self.queueList.setCurrentIndex(pos)
         self.playlistPosChanged()
-        if self.player.state() == QMediaPlayer.StoppedState or self.player.state() == QMediaPlayer.PausedState:
+        if (
+            self.player.state() == QMediaPlayer.StoppedState or
+            self.player.state() == QMediaPlayer.PausedState
+        ):
             self.player.play()
 
     def metaDataChanged(self):
@@ -187,7 +204,7 @@ class Player(QMediaPlayer):
                 )
             else:
                 file = self.player.currentMedia().canonicalUrl().toString()
-                
+
                 self.parent.titleLabel.setText(
                     Path(file).stem
                 )
@@ -197,7 +214,10 @@ class Player(QMediaPlayer):
                     self.player.metaData(QMediaMetaData.AlbumArtist)
                 )
             elif self.player.metaData(QMediaMetaData.ContributingArtist):
-                artist = self.player.metaData(QMediaMetaData.ContributingArtist)
+                artist = self.player.metaData(
+                    QMediaMetaData.ContributingArtist
+                )
+
                 if type(artist) is list:
                     self.parent.artistLabel.setText(artist[0])
                 else:

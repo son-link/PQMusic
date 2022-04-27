@@ -1,4 +1,4 @@
-from .ui import Ui_gui
+from .ui import Ui_gui, open_url_dialog
 from .player import Player
 from PyQt5.QtCore import (
     Qt,
@@ -11,7 +11,6 @@ from PyQt5.QtCore import (
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import (
     QIcon,
-    QCursor,
     QPixmap,
     QStandardItemModel,
     QFontDatabase
@@ -69,6 +68,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.menuAddFolder.triggered.connect(self.addDir)
         trayMenu.addAction(self.menuAddFolder)
 
+        self.menuAddUrl = QtWidgets.QAction(
+            QIcon.fromTheme('view-links'),
+            _translate('MainWindow', 'Add URL'),
+            trayMenu
+        )
+        self.menuAddUrl.triggered.connect(self.addUrl)
+        trayMenu.addAction(self.menuAddUrl)
+
         self.menuButton.setMenu(trayMenu)
 
         # Volume
@@ -83,7 +90,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self,
             _translate('MainWindow', 'Select file to open'),
             '',
-            _translate('MainWindow', 'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)'),
+            _translate(
+                'MainWindow',
+                'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)'
+            ),
         )
 
         startPlay = (self.player.queueList.mediaCount() == 0)
@@ -115,6 +125,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             elif file.is_file():
                 self.player.addFile(file.path)
 
+    def addUrl(self):
+        self.addUrlDialog = open_url_dialog.addDialog(self, self.appendUrl)
+        self.addUrlDialog.exec_()
+
+    def appendUrl(self, url, mimetype):
+        self.player.addUrl(url, mimetype)
+
     def changeTrack(self, w):
         row = w.row()
         self.player.changePos(row)
@@ -134,7 +151,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         model = self.playlistView.selectionModel()
         indexes = model.selectedIndexes()
         indexes.sort(reverse=True)
-        items = [self.playlistView.model().itemFromIndex(index) for index in indexes]
+        items = [
+            self.playlistView.model().itemFromIndex(index) for index in indexes
+        ]
+
         for item in items:
             pos = item.row()
             self.playlistView.model().removeRow(pos)
@@ -148,11 +168,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.clearMetadata()
 
     def clearMetadata(self):
-        self.titleLabel.setText('')
-        self.artistLabel.setText('')
-        self.albumLabel.setText('')
+        self.titleLabel.setText(
+            _translate('MainWindow', 'Track Title')
+        )
+        self.artistLabel.setText(
+            _translate('MainWindow', 'Artist')
+        )
+        self.albumLabel.setText(
+            _translate('MainWindow', 'Album')
+        )
 
-        cover = QPixmap('no-cover.png')
+        cover = QPixmap(':/no_cover.svg')
         self.labelCover.setPixmap(
             cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
         )
