@@ -9,6 +9,7 @@ from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem, QFont
 from pathlib import Path
 from .utils import getMetaData
+from pathlib import Path
 
 import magic
 
@@ -180,9 +181,16 @@ class Player(QMediaPlayer):
 
     def metaDataChanged(self):
         if self.player.isMetaDataAvailable():
-            self.parent.titleLabel.setText(
-                self.player.metaData(QMediaMetaData.Title)
-            )
+            if self.player.metaData(QMediaMetaData.Title):
+                self.parent.titleLabel.setText(
+                    self.player.metaData(QMediaMetaData.Title)
+                )
+            else:
+                file = self.player.currentMedia().canonicalUrl().toString()
+                
+                self.parent.titleLabel.setText(
+                    Path(file).stem
+                )
 
             if self.player.metaData(QMediaMetaData.AlbumArtist):
                 self.parent.artistLabel.setText(
@@ -194,6 +202,10 @@ class Player(QMediaPlayer):
                     self.parent.artistLabel.setText(artist[0])
                 else:
                     self.parent.artistLabel.setText(artist)
+            else:
+                self.parent.artistLabel.setText(
+                    _translate('MainWindow', 'Unknown')
+                )
 
             self.parent.albumLabel.setText(
                 self.player.metaData(QMediaMetaData.AlbumTitle)

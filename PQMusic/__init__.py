@@ -172,13 +172,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
 def init():
     LOCAL_DIR = path.dirname(path.realpath(__file__))
     app = QtWidgets.QApplication([])
-    '''defaultLocale = QLocale.system().name()
-    if defaultLocale == 'es_ES':
+    defaultLocale = QLocale.system().name()
+    if defaultLocale.startswith('es_'):
         defaultLocale = 'es'
 
     translator = QTranslator()
     translator.load(LOCAL_DIR + "/locales/" + defaultLocale + ".qm")
-    app.installTranslator(translator)'''
+    app.installTranslator(translator)
 
     QFontDatabase.addApplicationFont('OpenSans.ttf')
 
