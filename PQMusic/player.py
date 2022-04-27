@@ -1,8 +1,16 @@
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent, QMediaMetaData
+from PyQt5.QtMultimedia import (
+    QMediaPlayer,
+    QMediaPlaylist,
+    QMediaContent,
+    QMediaMetaData,
+    QAudioDecoder
+)
 from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem, QFont
 from pathlib import Path
 from .utils import getMetaData
+
+import magic
 
 _translate = QCoreApplication.translate
 
@@ -39,22 +47,23 @@ class Player(QMediaPlayer):
         self.player.durationChanged.connect(self.durationChanged)
         self.queueList.currentIndexChanged.connect(self.playlistPosChanged)
 
-    def add(self, file):
-        self.queueList.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
-        tags = getMetaData(file)
+    def addFile(self, file):
+        if self.checkValidFile(file):
+            self.queueList.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
+            tags = getMetaData(file)
 
-        if tags['notags']:
-            item = QStandardItem(tags['notags'])
-        else:
-            item = QStandardItem('{} - {}'.format(
-                tags['artist'],
-                tags['title']
-            ))
+            if tags['notags']:
+                item = QStandardItem(tags['notags'])
+            else:
+                item = QStandardItem('{} - {}'.format(
+                    tags['artist'],
+                    tags['title']
+                ))
 
-        self.parent.plModel.appendRow(item)
-        self.parent.playButton.setEnabled(True)
-        self.parent.timeSlider.setEnabled(True)
-        self.parent.queueNextButton.setEnabled(True)
+            self.parent.plModel.appendRow(item)
+            self.parent.playButton.setEnabled(True)
+            self.parent.timeSlider.setEnabled(True)
+            self.parent.queueNextButton.setEnabled(True)
 
     def playPause(self):
         icon = QIcon.fromTheme("media-playback-pause")
@@ -204,3 +213,9 @@ class Player(QMediaPlayer):
                 self.parent.labelCover.setPixmap(
                     cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
                 )
+
+    def checkValidFile(self, file):
+        f = magic.Magic(mime=True)
+        if f.from_file(file).startswith('audio'):
+            return True
+        return False

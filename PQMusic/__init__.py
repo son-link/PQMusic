@@ -14,10 +14,9 @@ from PyQt5.QtGui import (
     QCursor,
     QPixmap,
     QStandardItemModel,
-    QFont,
     QFontDatabase
 )
-from os import path
+from os import path, scandir
 
 _translate = QCoreApplication.translate
 
@@ -30,13 +29,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
         self.player = Player(self)
+        self.resize_event = False
 
         self.plModel = QStandardItemModel()
         self.playlistView.setModel(self.plModel)
 
         # Hide the playlisy layout
+        self.blockSignals(True)
         self.playListFrame.hide()
-        QTimer.singleShot(0, self.adjustSize)
+        self.adjustSize()
+        self.blockSignals(False)
+        self.resize_event = True
 
         self.timeSlider.valueChanged.connect(self.player.setPosition)
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
@@ -50,13 +53,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
 
         # Menu
         trayMenu = QtWidgets.QMenu()
-        self.menuAdd = QtWidgets.QAction(
+        self.menuAddFiles = QtWidgets.QAction(
             QIcon.fromTheme('list-add'),
             _translate('MainWindow', 'Add file(s)'),
             trayMenu
         )
-        self.menuAdd.triggered.connect(self.open_files)
-        trayMenu.addAction(self.menuAdd)
+        self.menuAddFiles.triggered.connect(self.open_files)
+        trayMenu.addAction(self.menuAddFiles)
+
+        self.menuAddFolder = QtWidgets.QAction(
+            QIcon.fromTheme('folder-add'),
+            _translate('MainWindow', 'Add folder'),
+            trayMenu
+        )
+        self.menuAddFolder.triggered.connect(self.addDir)
+        trayMenu.addAction(self.menuAddFolder)
 
         self.menuButton.setMenu(trayMenu)
 
@@ -66,17 +77,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.volumeSlider.setMaximum(100)
         self.volumeSlider.setMinimum(0)
         self.volumeSlider.setValue(self.player.volume)
-
-    def open_file(self):
-        file, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self,
-            _translate('MainWindow', 'Select file to open'),
-            '',
-            _translate('MainWindow', 'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)'),
-        )
-
-        if file:
-            self.player.add(file)
 
     def open_files(self):
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(
@@ -89,22 +89,43 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         startPlay = (self.player.queueList.mediaCount() == 0)
         if files:
             for file in files:
-                self.player.add(file)
+                self.player.addFile(file)
 
             if startPlay:
                 self.player.startPlay()
+
+    def addDir(self):
+        folder = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            _translate('MainWindow', 'Select folder'),
+            '',
+            QtWidgets.QFileDialog.ShowDirsOnly
+        )
+
+        if folder:
+            self.scandir(folder)
+
+    def scandir(self, folder):
+        for file in scandir(folder):
+            if file.is_dir():
+                self.scandir(file.path)
+            elif file.is_file():
+                self.player.addFile(file.path)
 
     def changeTrack(self, w):
         row = w.row()
         self.player.changePos(row)
 
     def showHidePlaylist(self):
+        self.resize_event = False
+
         if self.playlistButton.isChecked():
             self.playListFrame.show()
         else:
             self.playListFrame.hide()
 
         QTimer.singleShot(0, self.adjustSize)
+        self.resize_event = True
 
     def delTracks(self):
         model = self.playlistView.selectionModel()
@@ -137,6 +158,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.queueNextButton.setEnabled(False)
         self.playButton.setEnabled(False)
         self.timeSlider.setEnabled(False)
+
+    def resizeEvent(self, event):
+        if self.resize_event:
+            if event.size().height() >= 320:
+                self.playListFrame.show()
+                self.playlistButton.setChecked(True)
+            else:
+                self.playListFrame.hide()
+                self.playlistButton.setChecked(False)
 
 
 def init():
