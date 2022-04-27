@@ -40,7 +40,20 @@ def getMetaData(filename):
 
 
 def getMetaDataUrl(url, mimetype):
-    data = get_n_bytes(url, 10)
+    tags = {
+        'album':    'Unknown',
+        'artist':   'Unknown',
+        'title':    'Unknown',
+        'notags':   ''
+    }
+
+    if mimetype == 'audio/mpeg':
+        data = get_n_bytes(url, 10)
+    elif mimetype == 'audio/ogg':
+        data = get_n_bytes(url, 24)
+    else:
+        tags['notags'] = url
+        return tags
 
     size_encoded = bytearray(data[-4:])
     size = reduce(lambda a, b: a*128+b, size_encoded, 0)
@@ -49,13 +62,6 @@ def getMetaDataUrl(url, mimetype):
     # mutagen needs one full frame in order to function. Add max frame size
     header.write(data)
     header.seek(0)
-
-    tags = {
-        'album':    'Unknown',
-        'artist':   'Unknown',
-        'title':    'Unknown',
-        'notags':   ''
-    }
 
     info = None
 
