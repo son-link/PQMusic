@@ -1,5 +1,28 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/luv/places/22/folder.svg</file>
+    <file>icons/luv/places/22/folder-cloud.svg</file>
+    <file>icons/luv/places/22/folder-music-sidebar.svg</file>
+    <file>icons/luv/places/22/folder-network.svg</file>
+    <file>icons/luv/places/22/folder-cloud-sidebar.svg</file>
+    <file>icons/luv/places/22/folder-documents.svg</file>
+    <file>icons/luv/places/22/folder-pictures.svg</file>
+    <file>icons/luv/places/22/folder-publicshare.svg</file>
+    <file>icons/luv/places/22/network-workgroup.svg</file>
+    <file>icons/luv/places/22/start-here.svg</file>
+    <file>icons/luv/places/22/user-desktop.svg</file>
+    <file>icons/luv/places/22/user-home.svg</file>
+    <file>icons/luv/places/22/folder-documents-sidebar.svg</file>
+    <file>icons/luv/places/22/folder-download.svg</file>
+    <file>icons/luv/places/22/folder-sidebar.svg</file>
+    <file>icons/luv/places/22/folder-templates.svg</file>
+    <file>icons/luv/places/22/folder-download-sidebar.svg</file>
+    <file>icons/luv/places/22/folder-music.svg</file>
+    <file>icons/luv/places/22/folder-videos.svg</file>
+    <file>icons/luv/places/22/folder-videos-sidebar.svg</file>
+    <file>icons/luv/places/22/user-home-sidebar.svg</file>
+    <file>icons/luv/places/22/user-trash.svg</file>
+    <file>icons/luv/places/22/user-trash-full.svg</file>
     <file>no_cover.svg</file>
     <file>icon.svg</file>
     <file>icons/luv/index.theme</file>

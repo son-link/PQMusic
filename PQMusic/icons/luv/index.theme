@@ -8,3 +8,10 @@ Context=Actions
 Type=Scalable
 MinSize=22
 MaxSize=256
+
+[places/22]
+Size=22
+Context=Places
+Type=Scalable
+MinSize=22
+MaxSize=256
