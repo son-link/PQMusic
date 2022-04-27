@@ -103,7 +103,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         )
 
         if folder:
+            startPlay = (self.player.queueList.mediaCount() == 0)
             self.scandir(folder)
+            if startPlay:
+                self.player.startPlay()
 
     def scandir(self, folder):
         for file in scandir(folder):
