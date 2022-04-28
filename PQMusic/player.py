@@ -7,7 +7,9 @@ from PyQt5.QtMultimedia import (
 from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from pathlib import Path
-from .utils import getMetaData, getMetaDataUrl
+from .utils import getMetaData
+from urllib.parse import urlparse
+from os import path
 
 import magic
 
@@ -66,19 +68,13 @@ class Player(QMediaPlayer):
 
     def addUrl(self, url, mimetype):
         self.queueList.addMedia(QMediaContent(QUrl(url)))
-        tags = getMetaDataUrl(url, mimetype)
-        if tags['notags']:
-            item = QStandardItem(tags['notags'])
-        else:
-            item = QStandardItem('{} - {}'.format(
-                tags['artist'],
-                tags['title']
-            ))
-
-        self.parent.plModel.appendRow(item)
-        self.parent.playButton.setEnabled(True)
-        self.parent.timeSlider.setEnabled(True)
-        self.parent.queueNextButton.setEnabled(True)
+        if mimetype.startswith('audio/'):
+            parse = urlparse(url)
+            filename = path.basename(parse.path)
+            self.parent.plModel.appendRow(QStandardItem(filename))
+            self.parent.playButton.setEnabled(True)
+            self.parent.timeSlider.setEnabled(True)
+            self.parent.queueNextButton.setEnabled(True)
 
     def playPause(self):
         icon = QIcon.fromTheme("media-playback-pause")
