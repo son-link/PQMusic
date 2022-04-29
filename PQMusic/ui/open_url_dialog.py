@@ -25,8 +25,8 @@ class addUrlThread(QThread):
         self.url = url
 
     def run(self):
-        resp = requests.head(self.url)
-        print(resp.status_code, resp.text, resp.headers)
+        resp = requests.head(self.url, allow_redirects=True)
+
         if (
             resp.status_code == 200 and
             resp.headers['Content-Type'].startswith('audio')
@@ -56,6 +56,7 @@ class addDialog(QtWidgets.QDialog):
         self.ui = Ui_add_url_dialog.Ui_Dialog()
         self.ui.setupUi(self)
         self.callback = callback
+        self.addThread = None
 
         self.setWindowFlags(
             Qt.Window | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
