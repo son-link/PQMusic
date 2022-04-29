@@ -113,10 +113,13 @@ class Player(QMediaPlayer):
     def durationChanged(self, duration):
         total_time = '0:00:00'
         duration = self.player.duration()
-        total_time = ms_to_time(duration)
-        self.parent.timeSlider.setMaximum(duration)
-        self.currentTrackDuration = duration
-        self.parent.totalTimeLabel.setText(total_time)
+
+        if duration > 0:
+            total_time = ms_to_time(duration)
+            self.parent.timeSlider.setMaximum(duration)
+            self.parent.timeSlider.setEnabled(True)
+            self.currentTrackDuration = duration
+            self.parent.totalTimeLabel.setText(total_time)
 
     def qmp_mediaStatusChanged(self, status):
         icon = QIcon.fromTheme("media-playback-pause")
@@ -141,6 +144,8 @@ class Player(QMediaPlayer):
         self.parent.timeSlider.blockSignals(False)
 
     def playlistPosChanged(self):
+        self.parent.timeSlider.setValue(0)
+        self.parent.timeSlider.setEnabled(False)
         if self.queueList.mediaCount() > 0:
             pos = self.queueList.currentIndex()
 
@@ -156,7 +161,10 @@ class Player(QMediaPlayer):
                     self.parent.queuePrevButton.setEnabled(False)
 
             if self.prevPosition > -1:
-                prevItem = self.parent.playlistView.model().item(self.prevPosition)
+                prevItem = self.parent.playlistView.model().item(
+                    self.prevPosition
+                )
+                
                 if prevItem:
                     font = prevItem.font()
                     font.setBold(False)
