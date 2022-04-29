@@ -130,7 +130,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.addUrlDialog.exec_()
 
     def appendUrl(self, url, mimetype):
+        startPlay = (self.player.queueList.mediaCount() == 0)
         self.player.addUrl(url, mimetype)
+        if startPlay:
+            self.player.startPlay()
 
     def changeTrack(self, w):
         row = w.row()
