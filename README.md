@@ -3,8 +3,9 @@
 ![](https://img.shields.io/github/license/son-link/PQMusic)
 ![](https://img.shields.io/github/downloads/son-link/PQMusic/total)
 ![](https://img.shields.io/github/stars/son-link/PQMusic)
-![](https://img.shields.io/pypi/v/PQMusic)
-![](https://img.shields.io/pypi/dm/PQMusic?label=downloas%20on%20PyPi)
+![](https://img.shields.io/pypi/v/pqmusic)
+![](https://img.shields.io/pypi/dm/pqmusic?label=downloas%20on%20PyPi)
+![AUR version](https://img.shields.io/aur/version/pqmusic)
 
 [https://github.com/son-link/PQMusic](https://github.com/son-link/PQMusic)
 
@@ -44,7 +45,14 @@ Licensed under GNU/GPL3 or higher.
 
 `pip install PQMusic`
 
+### AUR:
+
+If you use Arch Linux, Manjaro, or other Arch Linux base distributions, you can install yhe official package from [AUR](https://aur.archlinux.org/packages/pqmusic)
+
+For example: `yay -S pqmusic`
+
 ### Executables:
+
 You can download a **AppImage** for **GNU/Linux** on [releases page](https://github.com/son-link/PQMusic/releases)
 
 ## Other credits:
