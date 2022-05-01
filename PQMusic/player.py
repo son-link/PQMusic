@@ -31,7 +31,7 @@ def ms_to_time(t):
 
 
 class Player(QMediaPlayer):
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         super(Player, self).__init__(parent)
         self.parent = parent
         self.player = QMediaPlayer()
@@ -49,6 +49,7 @@ class Player(QMediaPlayer):
         self.queueList.currentIndexChanged.connect(self.playlistPosChanged)
 
     def addFile(self, file):
+        """ Add a file to the playlist """
         if self.checkValidFile(file):
             self.queueList.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
             tags = getMetaData(file)
@@ -65,8 +66,17 @@ class Player(QMediaPlayer):
             self.parent.playButton.setEnabled(True)
             self.parent.timeSlider.setEnabled(True)
             self.parent.queueNextButton.setEnabled(True)
+            if self.queueList.mediaCount() > 1:
+                self.parent.repeatButton.setEnabled(True)
 
     def addUrl(self, url, mimetype):
+        """ Add a URL to the playlist.
+            Args:
+                url : str
+                    The URL to add
+                mimetype:
+                    The URL mimetype
+        """
         self.queueList.addMedia(QMediaContent(QUrl(url)))
         if mimetype.startswith('audio/'):
             parse = urlparse(url)
@@ -76,41 +86,55 @@ class Player(QMediaPlayer):
             self.parent.timeSlider.setEnabled(True)
             self.parent.queueNextButton.setEnabled(True)
 
-    def playPause(self):
-        icon = QIcon.fromTheme("media-playback-pause")
-
-        if self.player.state() == QMediaPlayer.StoppedState:
-            if self.player.mediaStatus() == QMediaPlayer.NoMedia:
-                if self.queueList.mediaCount() != 0:
-                    self.player.play()
-            elif self.player.mediaStatus() == QMediaPlayer.LoadedMedia:
-                self.queueList.setCurrentIndex(self.position)
-                self.player.play()
-            elif self.player.mediaStatus() == QMediaPlayer.BufferedMedia:
-                self.player.play()
-        elif self.player.state() == QMediaPlayer.PlayingState:
-            icon = QIcon.fromTheme("media-playback-start")
-            self.player.pause()
-        elif self.player.state() == QMediaPlayer.PausedState:
+    def changePos(self, pos):
+        """ Change the playlist position to the position indicted.
+            Args:
+                pos : int
+                    The new playlist position
+        """
+        self.queueList.setCurrentIndex(pos)
+        self.playlistPosChanged()
+        if (
+            self.player.state() == QMediaPlayer.StoppedState or
+            self.player.state() == QMediaPlayer.PausedState
+        ):
             self.player.play()
 
-        self.parent.playButton.setIcon(icon)
+    def checkValidFile(self, file):
+        """ Check if the file is a valid audio file.
+            Args:
+                file : str
+                    Path to the file
+            Returns:
+                True is valid, False is not
+        """
+        f = magic.Magic(mime=True)
 
-    def startPlay(self):
-        self.queueList.setCurrentIndex(0)
-        self.player.play()
-        icon = QIcon.fromTheme("media-playback-pause")
-        self.parent.playButton.setIcon(icon)
+        if f.from_file(file).startswith('audio'):
+            return True
+        return False
 
-    def stop(self):
-        self.player.stop()
-        icon = QIcon.fromTheme("media-playback-start")
-        self.parent.playButton.setIcon(icon)
-
-    def setPosition(self, pos):
-        self.player.setPosition(pos)
+    def delete(self, position):
+        """ Delete the track and her data from position.
+            Args:
+                position : int
+                    The current playlist position
+        """
+        self.queueList.removeMedia(position)
+        if self.queueList.mediaCount() > 0:
+            if position == self.position:
+                self.playlistPosChanged()
+        else:
+            self.parent.clearMetadata()
+            self.stop()
 
     def durationChanged(self, duration):
+        """ This function is called when the duration of the track changes,
+            mainly when changing tracks.
+            Args:
+                duration : int
+                    The current track duration in milliseconds
+        """
         total_time = '0:00:00'
         duration = self.player.duration()
 
@@ -121,86 +145,10 @@ class Player(QMediaPlayer):
             self.currentTrackDuration = duration
             self.parent.totalTimeLabel.setText(total_time)
 
-    def qmp_mediaStatusChanged(self, status):
-        icon = QIcon.fromTheme("media-playback-pause")
-        if self.player.state() == QMediaPlayer.StoppedState:
-            icon = QIcon.fromTheme("media-playback-start")
-        elif self.player.state() == QMediaPlayer.PausedState:
-            icon = QIcon.fromTheme("media-playback-start")
-
-        self.parent.playButton.setIcon(icon)
-
-    def qmp_positionChanged(self, position, senderType=False):
-        self.currentTime = position
-        current_time = '0:00:00'
-
-        if position != -1:
-            current_time = ms_to_time(position)
-
-        self.parent.timeLabel.setText(current_time)
-
-        self.parent.timeSlider.blockSignals(True)
-        self.parent.timeSlider.setValue(position)
-        self.parent.timeSlider.blockSignals(False)
-
-    def playlistPosChanged(self):
-        self.parent.timeSlider.setValue(0)
-        self.parent.timeSlider.setEnabled(False)
-        if self.queueList.mediaCount() > 0:
-            pos = self.queueList.currentIndex()
-
-            if self.queueList.mediaCount() > 1:
-                if pos < self.queueList.mediaCount() - 1:
-                    self.parent.queueNextButton.setEnabled(True)
-                else:
-                    self.parent.queueNextButton.setEnabled(False)
-
-                if pos > 0:
-                    self.parent.queuePrevButton.setEnabled(True)
-                else:
-                    self.parent.queuePrevButton.setEnabled(False)
-
-            if self.prevPosition > -1:
-                prevItem = self.parent.playlistView.model().item(
-                    self.prevPosition
-                )
-                
-                if prevItem:
-                    font = prevItem.font()
-                    font.setBold(False)
-                    prevItem.setFont(font)
-
-            self.position = pos
-            self.prevPosition = pos
-            item = self.parent.playlistView.model().item(pos)
-            if (item):
-                font = item.font()
-                font.setBold(True)
-                item.setFont(font)
-
-    def setVolume(self, volume):
-        self.player.setVolume(volume)
-
-    def delete(self, position):
-        """ Delete the track and her data from position"""
-        self.queueList.removeMedia(position)
-        if self.queueList.mediaCount() > 0:
-            if position == self.position:
-                self.playlistPosChanged()
-        else:
-            self.parent.clearMetadata()
-            self.stop()
-
-    def changePos(self, pos):
-        self.queueList.setCurrentIndex(pos)
-        self.playlistPosChanged()
-        if (
-            self.player.state() == QMediaPlayer.StoppedState or
-            self.player.state() == QMediaPlayer.PausedState
-        ):
-            self.player.play()
-
     def metaDataChanged(self):
+        """ This function is called whenever the metadata changes,
+            e.g. track changes or is received during a live stream.
+        """
         if self.player.isMetaDataAvailable():
             if self.player.metaData(QMediaMetaData.Title):
                 self.parent.titleLabel.setText(
@@ -250,8 +198,115 @@ class Player(QMediaPlayer):
                     cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
                 )
 
-    def checkValidFile(self, file):
-        f = magic.Magic(mime=True)
-        if f.from_file(file).startswith('audio'):
-            return True
-        return False
+    def playlistPosChanged(self):
+        """ This function is called when the position
+            on the playlist is change
+        """
+        self.parent.timeSlider.setValue(0)
+        self.parent.timeSlider.setEnabled(False)
+        if self.queueList.mediaCount() > 0:
+            pos = self.queueList.currentIndex()
+
+            if self.queueList.mediaCount() > 1:
+                if pos < self.queueList.mediaCount() - 1:
+                    self.parent.queueNextButton.setEnabled(True)
+                else:
+                    self.parent.queueNextButton.setEnabled(False)
+
+                if pos > 0:
+                    self.parent.queuePrevButton.setEnabled(True)
+                else:
+                    self.parent.queuePrevButton.setEnabled(False)
+
+            if self.prevPosition > -1:
+                prevItem = self.parent.playlistView.model().item(
+                    self.prevPosition
+                )
+
+                if prevItem:
+                    font = prevItem.font()
+                    font.setBold(False)
+                    prevItem.setFont(font)
+
+            self.position = pos
+            self.prevPosition = pos
+            item = self.parent.playlistView.model().item(pos)
+            if (item):
+                font = item.font()
+                font.setBold(True)
+                item.setFont(font)
+
+    def playPause(self):
+        """ Start/Pause the current track """
+        icon = QIcon.fromTheme("media-playback-pause")
+
+        if self.player.state() == QMediaPlayer.StoppedState:
+            if self.player.mediaStatus() == QMediaPlayer.NoMedia:
+                if self.queueList.mediaCount() != 0:
+                    self.player.play()
+            elif self.player.mediaStatus() == QMediaPlayer.LoadedMedia:
+                self.queueList.setCurrentIndex(self.position)
+                self.player.play()
+            elif self.player.mediaStatus() == QMediaPlayer.BufferedMedia:
+                self.player.play()
+        elif self.player.state() == QMediaPlayer.PlayingState:
+            icon = QIcon.fromTheme("media-playback-start")
+            self.player.pause()
+        elif self.player.state() == QMediaPlayer.PausedState:
+            self.player.play()
+
+        self.parent.playButton.setIcon(icon)
+
+    def qmp_mediaStatusChanged(self):
+        """ This function is called when the media status is change. """
+        icon = QIcon.fromTheme("media-playback-pause")
+        if self.player.state() == QMediaPlayer.StoppedState:
+            icon = QIcon.fromTheme("media-playback-start")
+        elif self.player.state() == QMediaPlayer.PausedState:
+            icon = QIcon.fromTheme("media-playback-start")
+
+        self.parent.playButton.setIcon(icon)
+
+    def qmp_positionChanged(self, position, senderType=False):
+        """ This function is called when the time track is change
+            and update the label.
+            Args:
+                position : int
+                    The current time in milliseconds
+        """
+        self.currentTime = position
+        current_time = '0:00:00'
+
+        if position != -1:
+            current_time = ms_to_time(position)
+
+        self.parent.timeLabel.setText(current_time)
+
+        self.parent.timeSlider.blockSignals(True)
+        self.parent.timeSlider.setValue(position)
+        self.parent.timeSlider.blockSignals(False)
+
+    def setPosition(self, pos):
+        """ Change the playlist position
+            Args:
+                pos : int
+                    The new playlist position to play
+        """
+        self.player.setPosition(pos)
+
+    def setVolume(self, volume):
+        """ Set the volume """
+        self.player.setVolume(volume)
+
+    def startPlay(self):
+        """ Automatically starts playback from the first song """
+        self.queueList.setCurrentIndex(0)
+        self.player.play()
+        icon = QIcon.fromTheme("media-playback-pause")
+        self.parent.playButton.setIcon(icon)
+
+    def stop(self):
+        """ Stop playback """
+        self.player.stop()
+        icon = QIcon.fromTheme("media-playback-start")
+        self.parent.playButton.setIcon(icon)

@@ -27,11 +27,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
-        self.player = Player(self)
-        self.resize_event = False
 
+        self.player = Player(self)
         self.plModel = QStandardItemModel()
         self.playlistView.setModel(self.plModel)
+        self.resize_event = False
 
         # Hide the playlisy layout
         self.blockSignals(True)
@@ -40,15 +40,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.blockSignals(False)
         self.resize_event = True
 
+        self.listClearButton.clicked.connect(self.clearPlaylist)
+        self.listRemoveButton.clicked.connect(self.delTracks)
+        self.playButton.clicked.connect(self.player.playPause)
+        self.playlistButton.clicked.connect(self.showHidePlaylist)
+        self.playlistView.doubleClicked.connect(self.changeTrack)
+        self.queueNextButton.clicked.connect(self.player.queueList.next)
+        self.queuePrevButton.clicked.connect(self.player.queueList.previous)
         self.timeSlider.valueChanged.connect(self.player.setPosition)
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
-        self.playButton.clicked.connect(self.player.playPause)
-        self.playlistView.doubleClicked.connect(self.changeTrack)
-        self.queuePrevButton.clicked.connect(self.player.queueList.previous)
-        self.queueNextButton.clicked.connect(self.player.queueList.next)
-        self.playlistButton.clicked.connect(self.showHidePlaylist)
-        self.listRemoveButton.clicked.connect(self.delTracks)
-        self.listClearButton.clicked.connect(self.clearPlaylist)
 
         # Menu
         trayMenu = QtWidgets.QMenu()
@@ -57,7 +57,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             _translate('MainWindow', 'Add file(s)'),
             trayMenu
         )
-        self.menuAddFiles.triggered.connect(self.open_files)
+        self.menuAddFiles.triggered.connect(self.addFiles)
         trayMenu.addAction(self.menuAddFiles)
 
         self.menuAddFolder = QtWidgets.QAction(
@@ -85,7 +85,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.volumeSlider.setMinimum(0)
         self.volumeSlider.setValue(self.player.volume)
 
-    def open_files(self):
+    def addDir(self):
+        """ Opens the dialog to select a folder to add the supported files inside it,
+            as well as subdirectories.
+        """
+        folder = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            _translate('MainWindow', 'Select folder'),
+            '',
+            QtWidgets.QFileDialog.ShowDirsOnly
+        )
+
+        if folder:
+            startPlay = (self.player.queueList.mediaCount() == 0)
+            self.scanDir(folder)
+            if startPlay:
+                self.player.startPlay()
+
+    def addFiles(self):
+        """ Opens the dialog to select files to add """
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self,
             _translate('MainWindow', 'Select file to open'),
@@ -104,73 +122,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             if startPlay:
                 self.player.startPlay()
 
-    def addDir(self):
-        folder = QtWidgets.QFileDialog.getExistingDirectory(
-            self,
-            _translate('MainWindow', 'Select folder'),
-            '',
-            QtWidgets.QFileDialog.ShowDirsOnly
-        )
-
-        if folder:
-            startPlay = (self.player.queueList.mediaCount() == 0)
-            self.scandir(folder)
-            if startPlay:
-                self.player.startPlay()
-
-    def scandir(self, folder):
-        for file in scandir(folder):
-            if file.is_dir():
-                self.scandir(file.path)
-            elif file.is_file():
-                self.player.addFile(file.path)
-
     def addUrl(self):
+        """ Displays the dialog for adding URLs """
         self.addUrlDialog = open_url_dialog.addDialog(self, self.appendUrl)
         self.addUrlDialog.exec_()
 
     def appendUrl(self, url, mimetype):
+        """ This is a callback function.
+            It is called each time a URL is added.
+            Args:
+                url : str
+                    The URL to add
+                mimetype : dtr
+                    The mimetype of the URL
+        """
         startPlay = (self.player.queueList.mediaCount() == 0)
         self.player.addUrl(url, mimetype)
         if startPlay:
             self.player.startPlay()
 
     def changeTrack(self, w):
+        """ This function is called when double clicking
+            on the playlist to switch to that track.
+            Args:
+                w : QStandarItem
+                    The QStandarItem selected
+        """
         row = w.row()
         self.player.changePos(row)
 
-    def showHidePlaylist(self):
-        self.resize_event = False
-
-        if self.playlistButton.isChecked():
-            self.playListFrame.show()
-        else:
-            self.playListFrame.hide()
-
-        QTimer.singleShot(0, self.adjustSize)
-        self.resize_event = True
-
-    def delTracks(self):
-        model = self.playlistView.selectionModel()
-        indexes = model.selectedIndexes()
-        indexes.sort(reverse=True)
-        items = [
-            self.playlistView.model().itemFromIndex(index) for index in indexes
-        ]
-
-        for item in items:
-            pos = item.row()
-            self.playlistView.model().removeRow(pos)
-            self.player.delete(pos)
-
-    def clearPlaylist(self):
-        model = self.playlistView.model()
-        model.removeRows(0, model.rowCount())
-        self.player.stop()
-        self.player.queueList.clear()
-        self.clearMetadata()
-
     def clearMetadata(self):
+        """ It shows again the initial texts (cover, title, artist and album),
+            as well as locking again several of the buttons.
+            It is called every time you click on the button to clear
+            the playlist, or to delete the selected ones and it becomes empty.
+        """
         self.titleLabel.setText(
             _translate('MainWindow', 'Track Title')
         )
@@ -191,7 +177,46 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.playButton.setEnabled(False)
         self.timeSlider.setEnabled(False)
 
+    def clearPlaylist(self):
+        """ Clear the playlist """
+        model = self.playlistView.model()
+        model.removeRows(0, model.rowCount())
+        self.player.stop()
+        self.player.queueList.clear()
+        self.clearMetadata()
+
+    def delTracks(self):
+        """ Remove the selected tracks in the playlist """
+        model = self.playlistView.selectionModel()
+        indexes = model.selectedIndexes()
+        indexes.sort(reverse=True)
+        items = [
+            self.playlistView.model().itemFromIndex(index) for index in indexes
+        ]
+
+        for item in items:
+            pos = item.row()
+            self.playlistView.model().removeRow(pos)
+            self.player.delete(pos)
+
+    def scanDir(self, folder):
+        """ Scan the specified folder and its subfolders for supported files
+            Args:
+                folder : str
+                    The path to the folder to scan
+        """
+        for file in scandir(folder):
+            if file.is_dir():
+                self.scanDir(file.path)
+            elif file.is_file():
+                self.player.addFile(file.path)
+
     def resizeEvent(self, event):
+        """ This function is called when resize the window.
+            Args:
+                event : The resize event
+                    The QStandarItem selected
+        """
         if self.resize_event:
             if event.size().height() >= 320:
                 self.playListFrame.show()
@@ -199,6 +224,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             else:
                 self.playListFrame.hide()
                 self.playlistButton.setChecked(False)
+
+    def showHidePlaylist(self):
+        """ Show/Hide the playlist frame """
+        self.resize_event = False
+
+        if self.playlistButton.isChecked():
+            self.playListFrame.show()
+        else:
+            self.playListFrame.hide()
+
+        QTimer.singleShot(0, self.adjustSize)
+        self.resize_event = True
 
 
 def init():
