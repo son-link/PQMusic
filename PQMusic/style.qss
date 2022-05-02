@@ -213,12 +213,15 @@ QSlider::groove:vertical{
     top: 5px; bottom: 5px;
 }
 QSlider::handle:horizontal{
-    width: 6px;
-    margin: -7px; /* height */
+    width: 12px;
+    margin: -5px 0px;
+	border-radius: 6px;
 }
 QSlider::handle:vertical{
     height: 6px;
-    margin: -7px; /* height */
+    width: 10px;
+    margin: 0px -5px;
+	border-radius: 5px;
 }
 QSlider::add-page{
     border: 1px solid #757575;
@@ -473,8 +476,3 @@ QMenu::item {
 QMenu::item:selected { /* when user selects item using mouse or keyboard */
     background-color: #03A9F4;
 }
-
-/*QLabel {
-    width: 200px;
-    padding: 0;
-}*/
