@@ -1,6 +1,6 @@
 /* ================================================ *
 author: Son Link
-lastedited: 2022-04-24
+lastedited: 2022-05-02
 * ================================================ */
 $text = #FFFFFF;
 $background = #212121;
@@ -16,34 +16,40 @@ QWidget
 	margin: 0px;
     color: $text;
     background-color: $background;
-	font-family: "Exo"
+	font-family: "Open Sans"
 }
 
 QFrame{
     color: $text;
     background-color: $background;/*不能设置为transparent*/
 }
+
 QMainWindow::separator{
     border: 1px solid $border;
     border-style: outset;
     width: 4px;
     height: 4px;
 }
+
 QMainWindow::separator:hover{
     background: $selected;
 }
+
 QSplitter::handle{
     border: 1px solid $border;
     border-style: outset;
     width: 4px;
     height: 4px;
 }
-QSplitter::handle:hover{/*splitter->handle(1)->setAttribute(Qt::WA_Hover, true);才生效*/
+
+QSplitter::handle:hover{
     border-color: $focused;
 }
+
 QSplitter::handle:pressed{
     border-color: $pressed;
 }
+
 QSizeGrip{
     background-color: none;
 }
@@ -56,7 +62,6 @@ QLabel {
     border: 1px solid transparent;
     padding: 1px;
 }
-
 
 /* A QLabel is a QFrame ... */
 /* A QToolTip is a QLabel ... */
@@ -71,7 +76,7 @@ QToolTip {
 /* TextBox                                         */
 /* =============================================== */
 QLineEdit {
-    background: $background;/*不建议设为透明，否则table编辑时会字显示*/
+    background: $background;
     selection-background-color: $selected;
     border: 1px solid $border;
     border-radius: 2px;
@@ -82,12 +87,13 @@ QLineEdit {
 QLineEdit:hover{
     border-color: $selected;
 }
+
 QLineEdit:focus{
     border-color: $focused;
 }
-/*QLineEdit[readOnly="true"] { color: gray }*/
+
 QLineEdit[echoMode="2"]{
-    lineedit-password-character: 9679;/*字符的ascii码35 88等 */
+    lineedit-password-character: 9679;
 }
 
 QLineEdit:read-only {
@@ -134,10 +140,10 @@ QPushButton:pressed
 }
 
 QPushButton:focus, QPushButton:default {
-    border-color: $focused; /* make the default button prominent */
+    border-color: $focused;
 }
 
-QToolButton,QToolButton:unchecked { /* ToolBar里的按钮和带下拉菜单的按钮 */
+QToolButton,QToolButton:unchecked {
     border: 1px solid transparent;
     border-radius: 3px;
     background-color: transparent;
@@ -218,12 +224,15 @@ QSlider::groove:vertical{
     top: 5px; bottom: 5px;
 }
 QSlider::handle:horizontal{
-    width: 6px;
-    margin: -7px; /* height */
+    width: 12px;
+    margin: -5px 0px;
+	border-radius: 6px;
 }
 QSlider::handle:vertical{
     height: 6px;
-    margin: -7px; /* height */
+    width: 10px;
+    margin: 0px -5px;
+	border-radius: 5px;
 }
 QSlider::add-page{
     border: 1px solid $border;
@@ -264,9 +273,7 @@ QScrollBar::add-page, QScrollBar::sub-page {
 QScrollArea{
     border: none;
 }
-/*QScrollArea  QAbstractSlider{
-    border-radius: 0px;
-}*/
+
 /* =============================================== */
 /* DockWidget                                       */
 /* =============================================== */
@@ -381,7 +388,7 @@ QHeaderView {
 	margin: 0px;
 	padding: 0px;
 }
-QHeaderView::section, QTableCornerButton::section {/*设置表头属性*//*左上角*/
+QHeaderView::section, QTableCornerButton::section {
 	background-color: $grad1a;
 	padding: 0 3px;
 	border-right: 1px solid $border;
@@ -403,16 +410,11 @@ QHeaderView::section:checked {
 /* =============================================== */
 QTableWidget, QTableView
 {
-    gridline-color: $border;    /*表格中的网格线条颜色*/
+    gridline-color: $border;
     background: $background;
-    /*设置交替颜色，需要在函数属性中设置:tableWidget->setAlternatingRowColors(true)*/
     alternate-background-color: $grad1a;
-    /*selection-color:$background;    鼠标选中时前景色：文字颜色*/
-    selection-background-color:$selected;   /*鼠标选中时背景色*/
-    border:1px solid $border;  /*边框线的宽度、颜色*/
-    /*border:none;    去除边界线*/
-    /*border-radius:5px;*/
-    /*padding:10px 10px;*/  /*表格与边框的间距*/
+    selection-background-color:$selected;
+    border:1px solid $border;
 }
 QTableView::item, QTabWidget::item{
     background: transparent;
@@ -477,9 +479,4 @@ QMenu::item {
 
 QMenu::item:selected { /* when user selects item using mouse or keyboard */
     background-color: $selected;
-}
-
-#timeLabel,
-#totalTimeLabel {
-	min-width: 60px
 }
