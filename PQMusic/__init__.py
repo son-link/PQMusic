@@ -47,6 +47,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.playlistView.doubleClicked.connect(self.changeTrack)
         self.queueNextButton.clicked.connect(self.player.queueList.next)
         self.queuePrevButton.clicked.connect(self.player.queueList.previous)
+        self.repeatButton.clicked.connect(self.player.setRepeatMode)
+        self.suffleButton.clicked.connect(self.player.switchRandomMode)
         self.timeSlider.valueChanged.connect(self.player.setPosition)
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
 
@@ -175,6 +177,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.queuePrevButton.setEnabled(False)
         self.queueNextButton.setEnabled(False)
         self.playButton.setEnabled(False)
+        self.suffleButton.setEnabled(False)
         self.timeSlider.setEnabled(False)
 
     def clearPlaylist(self):
@@ -221,9 +224,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             if event.size().height() >= 320:
                 self.playListFrame.show()
                 self.playlistButton.setChecked(True)
+                
             else:
                 self.playListFrame.hide()
                 self.playlistButton.setChecked(False)
+                
 
     def showHidePlaylist(self):
         """ Show/Hide the playlist frame """

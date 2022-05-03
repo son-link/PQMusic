@@ -64,10 +64,11 @@ class Player(QMediaPlayer):
 
             self.parent.plModel.appendRow(item)
             self.parent.playButton.setEnabled(True)
+            self.parent.repeatButton.setEnabled(True)
             self.parent.timeSlider.setEnabled(True)
             self.parent.queueNextButton.setEnabled(True)
             if self.queueList.mediaCount() > 1:
-                self.parent.repeatButton.setEnabled(True)
+                self.parent.suffleButton.setEnabled(True)
 
     def addUrl(self, url, mimetype):
         """ Add a URL to the playlist.
@@ -294,6 +295,17 @@ class Player(QMediaPlayer):
         """
         self.player.setPosition(pos)
 
+    def setRepeatMode(self):
+        checked = self.parent.repeatButton.isChecked()
+        if checked:
+            self.queueList.setPlaybackMode(
+                QMediaPlaylist.CurrentItemInLoop
+            )
+        else:
+            self.queueList.setPlaybackMode(
+                QMediaPlaylist.Sequential
+            )
+
     def setVolume(self, volume):
         """ Set the volume """
         self.player.setVolume(volume)
@@ -310,3 +322,15 @@ class Player(QMediaPlayer):
         self.player.stop()
         icon = QIcon.fromTheme("media-playback-start")
         self.parent.playButton.setIcon(icon)
+
+    def switchRandomMode(self):
+        """ Switch between sequential and random modes """
+        checked = self.parent.suffleButton.isChecked()
+        if checked:
+            self.queueList.setPlaybackMode(
+                QMediaPlaylist.Random
+            )
+        else:
+            self.queueList.setPlaybackMode(
+                QMediaPlaylist.Sequential
+            )
