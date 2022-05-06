@@ -6,8 +6,9 @@ from PyQt5.QtMultimedia import (
 )
 from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
+from PyQt5 import QtWidgets
 from pathlib import Path
-from .utils import getMetaData
+from .utils import getMetaData, openM3U, saveM3U
 from urllib.parse import urlparse
 from os import path
 
@@ -62,7 +63,10 @@ class Player(QMediaPlayer):
                     tags['title']
                 ))
 
+            tags['file'] = file
+
             self.parent.plModel.appendRow(item)
+            self.queueData.append(tags)
             self.parent.playButton.setEnabled(True)
             self.parent.repeatButton.setEnabled(True)
             self.parent.timeSlider.setEnabled(True)
@@ -199,6 +203,38 @@ class Player(QMediaPlayer):
                     cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
                 )
 
+    def openPlaylist(self):
+        """ Opens the dialog to select files to add """
+        file, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self.parent,
+            _translate('MainWindow', 'Select playlist to open'),
+            '',
+            _translate(
+                'MainWindow',
+                'Playlists (*.m3u *.m3u8)'
+            ),
+        )
+
+        startPlay = (self.queueList.mediaCount() == 0)
+        if file:
+            tracks = openM3U(file)
+            for track in tracks:
+                if 'notags' in track:
+                    item = QStandardItem(track['notags'])
+                else:
+                    item = QStandardItem('{} - {}'.format(
+                        track['artist'],
+                        track['title']
+                    ))
+                self.queueList.addMedia(
+                    QMediaContent(QUrl.fromLocalFile(track['file']))
+                )
+                self.parent.plModel.appendRow(item)
+                self.queueData.append(track)
+
+            if startPlay:
+                self.startPlay()
+
     def playlistPosChanged(self):
         """ This function is called when the position
             on the playlist is change
@@ -286,6 +322,20 @@ class Player(QMediaPlayer):
         self.parent.timeSlider.blockSignals(True)
         self.parent.timeSlider.setValue(position)
         self.parent.timeSlider.blockSignals(False)
+        
+    def savePlaylist(self):
+        """ Opens the dialog to save the playlist """
+        file, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self.parent,
+            _translate('MainWindow', 'Save the playlist'),
+            '',
+            _translate(
+                'MainWindow',
+                'Playlists (*.m3u *.m3u8)'
+            ),
+        )
+        if file:
+            saveM3U(self, file, self.queueData)
 
     def setPosition(self, pos):
         """ Change the playlist position

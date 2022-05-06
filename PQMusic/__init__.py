@@ -48,6 +48,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.queueNextButton.clicked.connect(self.player.queueList.next)
         self.queuePrevButton.clicked.connect(self.player.queueList.previous)
         self.repeatButton.clicked.connect(self.player.setRepeatMode)
+        self.savePlButton.clicked.connect(self.player.savePlaylist)
         self.suffleButton.clicked.connect(self.player.switchRandomMode)
         self.timeSlider.valueChanged.connect(self.player.setPosition)
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
@@ -77,6 +78,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         )
         self.menuAddUrl.triggered.connect(self.addUrl)
         trayMenu.addAction(self.menuAddUrl)
+
+        self.menuAddPL = QtWidgets.QAction(
+            QIcon.fromTheme('document-import'),
+            _translate('MainWindow', 'Add playlist'),
+            trayMenu
+        )
+        self.menuAddPL.triggered.connect(self.player.openPlaylist)
+        trayMenu.addAction(self.menuAddPL)
 
         self.menuButton.setMenu(trayMenu)
 
@@ -177,6 +186,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.queuePrevButton.setEnabled(False)
         self.queueNextButton.setEnabled(False)
         self.playButton.setEnabled(False)
+        self.repeatButton.setEnabled(False)
         self.suffleButton.setEnabled(False)
         self.timeSlider.setEnabled(False)
 
@@ -224,11 +234,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             if event.size().height() >= 320:
                 self.playListFrame.show()
                 self.playlistButton.setChecked(True)
-                
+
             else:
                 self.playListFrame.hide()
                 self.playlistButton.setChecked(False)
-                
 
     def showHidePlaylist(self):
         """ Show/Hide the playlist frame """

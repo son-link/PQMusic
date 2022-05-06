@@ -29,6 +29,8 @@
     <file>icons/luv/actions/22/application-menu.svg</file>
     <file>icons/luv/actions/22/audio-volume-high.svg</file>
     <file>icons/luv/actions/22/edit-clear-all.svg</file>
+    <file>icons/luv/actions/22/document-import.svg</file>
+    <file>icons/luv/actions/22/document-export.svg</file>
     <file>icons/luv/actions/22/folder-add.svg</file>
     <file>icons/luv/actions/22/list-add.svg</file>
     <file>icons/luv/actions/22/list-remove.svg</file>
