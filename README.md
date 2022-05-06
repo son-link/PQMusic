@@ -28,7 +28,7 @@ Licensed under GNU/GPL3 or higher.
 * Install the dependencies:
   * **From PIP** (with administration permissions): `pip install -r requirements.txt`
   * **Debian/Ubuntu/Mint/MX Linux**:
-    * apt: `apt install python3-pyqt5, python3-pyqt5.qtmultimedia, libqt5multimedia5, libqt5multimedia5-plugins`
+    * apt: `apt install python3-pyqt5, python3-pyqt5.qtmultimedia, libqt5multimedia5, libqt5multimedia5-plugins qtgstreamer-plugins-qt5`
     * Pypi: `pip3 install mutagen`
   * **Arch Linux/Manjaro**:
     * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia`
