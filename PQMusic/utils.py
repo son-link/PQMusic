@@ -2,6 +2,7 @@ from mutagen import File
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from pathlib import Path
+from os import access, R_OK
 
 
 def getMetaData(filename):
@@ -40,7 +41,7 @@ def getMetaData(filename):
 
 def openM3U(file):
     tracks = []
-    if Path(file).is_file():
+    if Path(file).is_file() and access(file, R_OK):
         with open(file, encoding='utf-8', errors="ignore") as m3u:
             have_info = False
             track_info = {
@@ -77,14 +78,20 @@ def openM3U(file):
 
 
 def saveM3U(self, filename, playlist):
-    with open(filename, 'w') as file:
-        file.write("#EXTM3U\n")
-        for data in playlist:
-            if not data['notags']:
-                file.write("#EXTINF:{},{} - {}\n".format(
-                    data['duration'],
-                    data['artist'],
-                    data['title']
-                ))
-            file.write("{}\n".format(data['file']))
-        file.close()
+    try:
+        with open(filename, 'w') as file:
+            file.write("#EXTM3U\n")
+            for data in playlist:
+                if not data['notags']:
+                    file.write("#EXTINF:{},{} - {}\n".format(
+                        data['duration'],
+                        data['artist'],
+                        data['title']
+                    ))
+                file.write("{}\n".format(data['file']))
+            file.close()
+    except IOError as x:
+        print('A error ocurrod on write {}: {}'.format(
+            filename,
+            x.strerror
+        ))
