@@ -235,6 +235,10 @@ class Player(QMediaPlayer):
                 self.queueData.append(track)
 
             if startPlay:
+                self.parent.playButton.setEnabled(True)
+                self.parent.repeatButton.setEnabled(True)
+                self.parent.timeSlider.setEnabled(True)
+                self.parent.queueNextButton.setEnabled(True)
                 self.startPlay()
 
     def playlistPosChanged(self):
