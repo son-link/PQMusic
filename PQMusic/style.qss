@@ -1,6 +1,6 @@
 /* ================================================ *
 author: Son Link
-lastedited: 2022-04-24
+lastedited: 2022-05-07
 * ================================================ */
 /*hover*/
 /*actived*/
@@ -19,27 +19,33 @@ QFrame{
     color: #FFFFFF;
     background-color: #212121;/*不能设置为transparent*/
 }
+
 QMainWindow::separator{
     border: 1px solid #757575;
     border-style: outset;
     width: 4px;
     height: 4px;
 }
+
 QMainWindow::separator:hover{
     background: #03A9F4;
 }
+
 QSplitter::handle{
     border: 1px solid #757575;
     border-style: outset;
     width: 4px;
     height: 4px;
 }
-QSplitter::handle:hover{/*splitter->handle(1)->setAttribute(Qt::WA_Hover, true);才生效*/
+
+QSplitter::handle:hover{
     border-color: #03A9F4;
 }
+
 QSplitter::handle:pressed{
     border-color: #1E8AD6;
 }
+
 QSizeGrip{
     background-color: none;
 }
@@ -66,7 +72,7 @@ QToolTip {
 /* TextBox                                         */
 /* =============================================== */
 QLineEdit {
-    background: #212121;/*不建议设为透明，否则table编辑时会字显示*/
+    background: #212121;
     selection-background-color: #03A9F4;
     border: 1px solid #757575;
     border-radius: 2px;
@@ -77,12 +83,13 @@ QLineEdit {
 QLineEdit:hover{
     border-color: #03A9F4;
 }
+
 QLineEdit:focus{
     border-color: #03A9F4;
 }
-/*QLineEdit[readOnly="true"] { color: gray }*/
+
 QLineEdit[echoMode="2"]{
-    lineedit-password-character: 9679;/*字符的ascii码35 88等 */
+    lineedit-password-character: 9679;
 }
 
 QLineEdit:read-only {
@@ -129,10 +136,10 @@ QPushButton:pressed
 }
 
 QPushButton:focus, QPushButton:default {
-    border-color: #03A9F4; /* make the default button prominent */
+    border-color: #03A9F4;
 }
 
-QToolButton,QToolButton:unchecked { /* ToolBar里的按钮和带下拉菜单的按钮 */
+QToolButton,QToolButton:unchecked {
     border: 1px solid transparent;
     border-radius: 3px;
     background-color: transparent;
@@ -159,7 +166,7 @@ QToolButton:checked:pressed{
 
 /* only for MenuButtonPopup */
 QToolButton[popupMode="1"]{
-    padding-left: 1px;
+    padding: 5px;
     padding-right: 15px; /* make way for the popup button */
     border: 0;
     min-height: 15px;
@@ -262,9 +269,7 @@ QScrollBar::add-page, QScrollBar::sub-page {
 QScrollArea{
     border: none;
 }
-/*QScrollArea  QAbstractSlider{
-    border-radius: 0px;
-}*/
+
 /* =============================================== */
 /* DockWidget                                       */
 /* =============================================== */
@@ -379,7 +384,7 @@ QHeaderView {
 	margin: 0px;
 	padding: 0px;
 }
-QHeaderView::section, QTableCornerButton::section {/*设置表头属性*//*左上角*/
+QHeaderView::section, QTableCornerButton::section {
 	background-color: #607D8B;
 	padding: 0 3px;
 	border-right: 1px solid #757575;
@@ -401,16 +406,11 @@ QHeaderView::section:checked {
 /* =============================================== */
 QTableWidget, QTableView
 {
-    gridline-color: #757575;    /*表格中的网格线条颜色*/
+    gridline-color: #757575;
     background: #212121;
-    /*设置交替颜色，需要在函数属性中设置:tableWidget->setAlternatingRowColors(true)*/
     alternate-background-color: #607D8B;
-    /*selection-color:#212121;    鼠标选中时前景色：文字颜色*/
-    selection-background-color:#03A9F4;   /*鼠标选中时背景色*/
-    border:1px solid #757575;  /*边框线的宽度、颜色*/
-    /*border:none;    去除边界线*/
-    /*border-radius:5px;*/
-    /*padding:10px 10px;*/  /*表格与边框的间距*/
+    selection-background-color:#03A9F4;
+    border:1px solid #757575;
 }
 QTableView::item, QTabWidget::item{
     background: transparent;
@@ -469,7 +469,7 @@ QMenu {
 }
 
 QMenu::item {
-    padding: 4px;
+    padding: 5px;
     background-color: transparent;
 }
 
