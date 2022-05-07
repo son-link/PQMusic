@@ -261,6 +261,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.player.delete(pos)
 
     def hideShowMW(self):
+        """ Show/Hide the main window """
         if self.isMWShow:
             self.hide()
             self.isMWShow = False

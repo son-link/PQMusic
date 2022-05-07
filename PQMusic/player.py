@@ -348,6 +348,7 @@ class Player(QMediaPlayer):
         self.player.setPosition(pos)
 
     def setRepeatMode(self):
+        """ Change repeat track mode between sequential and loop """
         checked = self.parent.repeatButton.isChecked()
         if checked:
             self.queueList.setPlaybackMode(

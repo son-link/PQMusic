@@ -6,6 +6,15 @@ from os import access, R_OK
 
 
 def getMetaData(filename):
+    """ Return the metadata of the audio file
+
+    Args:
+        filename (str): The file patch
+
+    Returns:
+        dict: A dictionary with the metadata
+    """
+
     ext = Path(filename).suffix
 
     tags = {
@@ -40,6 +49,15 @@ def getMetaData(filename):
 
 
 def openM3U(file):
+    """Open a M3U playlist file and return a array with the tracks info
+
+    Args:
+        file (str): The M3U path
+
+    Returns:
+        array: A dictionary array with all tracks on the playlist
+    """
+
     tracks = []
     if Path(file).is_file() and access(file, R_OK):
         with open(file, encoding='utf-8', errors="ignore") as m3u:
@@ -78,6 +96,12 @@ def openM3U(file):
 
 
 def saveM3U(self, filename, playlist):
+    """Save the playlist on a M3U playlist format file
+
+    Args:
+        filename (str): the path to write the playlist
+        playlist (array): The playlist array
+    """
     try:
         with open(filename, 'w') as file:
             file.write("#EXTM3U\n")
