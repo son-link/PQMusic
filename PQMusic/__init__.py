@@ -16,6 +16,7 @@ from PyQt5.QtGui import (
     QFontDatabase
 )
 from os import path, scandir
+from sys import exit as sysExit
 
 _translate = QCoreApplication.translate
 
@@ -28,6 +29,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
 
+        self.isMWShow = True
         self.player = Player(self)
         self.plModel = QStandardItemModel()
         self.playlistView.setModel(self.plModel)
@@ -81,7 +83,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
 
         self.menuAddPL = QtWidgets.QAction(
             QIcon.fromTheme('document-import'),
-            _translate('MainWindow', 'Add playlist'),
+            _translate('MainWindow', 'Open playlist'),
             trayMenu
         )
         self.menuAddPL.triggered.connect(self.player.openPlaylist)
@@ -95,6 +97,52 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.volumeSlider.setMaximum(100)
         self.volumeSlider.setMinimum(0)
         self.volumeSlider.setValue(self.player.volume)
+
+        # Tray icon
+        self.tray = QtWidgets.QSystemTrayIcon(
+            QIcon(QPixmap(':/icon.svg')),
+            self
+        )
+
+        # Tray menu
+        trayMenu = QtWidgets.QMenu()
+        self.trayPlay = QtWidgets.QAction(
+            QIcon.fromTheme('media-playback-start'),
+            _translate('MainWindow', 'Play/Pause'),
+            trayMenu
+        )
+        self.trayPlay.triggered.connect(self.player.playPause)
+        trayMenu.addAction(self.trayPlay)
+
+        prevAction = QtWidgets.QAction(
+            QIcon.fromTheme('media-skip-backward'),
+            _translate('MainWindow', 'Previous track'),
+            trayMenu
+        )
+        prevAction.triggered.connect(self.player.queueList.previous)
+        trayMenu.addAction(prevAction)
+
+        nextAction = QtWidgets.QAction(
+            QIcon.fromTheme('media-skip-forward'),
+            _translate('MainWindow', 'Next track'),
+            trayMenu
+        )
+        nextAction.triggered.connect(self.player.queueList.next)
+        trayMenu.addAction(nextAction)
+
+        closeAction = QtWidgets.QAction(
+            QIcon.fromTheme('application-exit'),
+            _translate('MainWindow', 'Quit'),
+            trayMenu
+        )
+        closeAction.triggered.connect(sysExit)
+        trayMenu.addAction(closeAction)
+
+        self.tray.setContextMenu(trayMenu)
+        self.tray.setToolTip('PQMusic')
+
+        self.tray.setVisible(True)
+        self.tray.activated.connect(self.hideShowMW)
 
     def addDir(self):
         """ Opens the dialog to select a folder to add the supported files inside it,
@@ -211,6 +259,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             pos = item.row()
             self.playlistView.model().removeRow(pos)
             self.player.delete(pos)
+
+    def hideShowMW(self):
+        if self.isMWShow:
+            self.hide()
+            self.isMWShow = False
+        else:
+            self.show()
+            self.isMWShow = True
 
     def scanDir(self, folder):
         """ Scan the specified folder and its subfolders for supported files
