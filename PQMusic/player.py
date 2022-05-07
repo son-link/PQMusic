@@ -10,7 +10,7 @@ from PyQt5 import QtWidgets
 from pathlib import Path
 from .utils import getMetaData, openM3U, saveM3U
 from urllib.parse import urlparse
-from os import path
+from os import path, access, R_OK
 
 import magic
 
@@ -113,10 +113,12 @@ class Player(QMediaPlayer):
             Returns:
                 True is valid, False is not
         """
-        f = magic.Magic(mime=True)
+        if access(file, R_OK):
+            f = magic.Magic(mime=True)
 
-        if f.from_file(file).startswith('audio'):
-            return True
+            if f.from_file(file).startswith('audio'):
+                return True
+
         return False
 
     def delete(self, position):
@@ -322,7 +324,7 @@ class Player(QMediaPlayer):
         self.parent.timeSlider.blockSignals(True)
         self.parent.timeSlider.setValue(position)
         self.parent.timeSlider.blockSignals(False)
-        
+
     def savePlaylist(self):
         """ Opens the dialog to save the playlist """
         file, _ = QtWidgets.QFileDialog.getSaveFileName(
