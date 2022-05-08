@@ -23,7 +23,9 @@ jobs:
           path: PQMusic
 
       - name: Install dependencies
-        run: sudo apt update && sudo apt-get install -yq python3 fuse
+        run: |
+          sudo apt update && sudo apt-get install -yq python3 python3-pip fuse
+          pip3 install -r requirements.txt .
 
       - name: Create AppImage
         run: |
