@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 MadBad <madbad82@gmail.com> -->
+<component type="desktop">
+  <launchable type="desktop-id">io.sonlink.pqmusic.desktop</launchable>
+  <id>io.sonlink.pqmusic</id>
+  <name>Speed Dreams</name>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <summary>PQMusic is a minimalist and easy to use audio player for download and use</summary>
+  <description>
+    <p>
+      PQMusic is a minimalist and easy to use audio player for download and use. You can play your local files, from a direct url or streaming and import/export playlists on M3U format
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/son-link/PQMusic/raw/main/screenshoot.jpg</image>
+    </screenshot>
+  </screenshots>
+  <metadata>
+    <value key="GnomeSoftware::popular-background">https://github.com/son-link/PQMusic/raw/main/screenshoot.jpg</value>
+  </metadata>
+  <url type="homepage">https://github.com/son-link/PQMusic</url>
+  <releases>
+     <release date="2022-05-07" version="0.3.0"/>
+     <release date="2022-04-30" version="0.2.0"/>
+     <release date="2022-04-26" version="0.1.0"/>
+  </releases>
+  <content_rating type="oars-1.1"/>
+  <developer_name>Alfonso Saavedra "Son Link"</developer_name>
+  <url type="bugtracker">https://github.com/son-link/PQMusic/issues</url>
+  <translation type="gettext">PQMusic</translation>
+</component>
