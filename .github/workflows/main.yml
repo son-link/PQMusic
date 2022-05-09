@@ -28,7 +28,6 @@ jobs:
 
       - name: Create AppImage
         run: |
-          cd pqmusic
           # Build AppImage
           ARCH=$(uname -m)
           VERSION=$(git describe --tags --always)
