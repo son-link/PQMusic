@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: son-link/PQMusic
-          path: PQMusic
+          path: pqmusic
 
       - name: Install dependencies
         run: |
@@ -28,6 +28,7 @@ jobs:
 
       - name: Create AppImage
         run: |
+          cd pqmusic
           # Build AppImage
           ARCH=$(uname -m)
           VERSION=$(git describe --tags --always)
