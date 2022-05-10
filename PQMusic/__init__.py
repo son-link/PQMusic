@@ -309,7 +309,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.resize_event = True
 
 
-def init():
+def init(custom_theme=True):
     LOCAL_DIR = path.dirname(path.realpath(__file__))
     app = QtWidgets.QApplication([])
     defaultLocale = QLocale.system().name()
@@ -320,15 +320,16 @@ def init():
     translator.load(LOCAL_DIR + "/locales/" + defaultLocale + ".qm")
     app.installTranslator(translator)
 
-    QFontDatabase.addApplicationFont('OpenSans.ttf')
+    if custom_theme:
+        QFontDatabase.addApplicationFont('OpenSans.ttf')
 
-    with open(LOCAL_DIR + '/style.qss', 'r', encoding='utf8') as fh:
-        app.setStyleSheet(fh.read())
+        with open(LOCAL_DIR + '/style.qss', 'r', encoding='utf8') as fh:
+            app.setStyleSheet(fh.read())
 
-    searchPaths = QIcon.fallbackSearchPaths()
-    searchPaths.append(':/icons')
-    QIcon.setFallbackSearchPaths(searchPaths)
-    QIcon.setThemeName('luv')
+        searchPaths = QIcon.fallbackSearchPaths()
+        searchPaths.append(':/icons')
+        QIcon.setFallbackSearchPaths(searchPaths)
+        QIcon.setThemeName('luv')
 
     window = MainWindow()
     window.retranslateUi(window)
