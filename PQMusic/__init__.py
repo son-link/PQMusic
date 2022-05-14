@@ -15,7 +15,7 @@ from PyQt5.QtGui import (
     QStandardItemModel,
     QFontDatabase
 )
-from os import path, scandir
+from os import path, listdir
 from sys import exit as sysExit
 
 _translate = QCoreApplication.translate
@@ -275,11 +275,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
                 folder : str
                     The path to the folder to scan
         """
-        for file in scandir(folder):
-            if file.is_dir():
-                self.scanDir(file.path)
-            elif file.is_file():
-                self.player.addFile(file.path)
+        for f in sorted(listdir(folder)):
+            file = path.join(folder, f)
+            if path.isdir(file):
+                self.scanDir(file)
+            elif path.isfile(file):
+                self.player.addFile(file)
 
     def resizeEvent(self, event):
         """ This function is called when resize the window.
