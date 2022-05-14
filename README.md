@@ -13,6 +13,8 @@
 
 PQMusic is a minimalistic and easy to use audio player for download and use.
 
+You can play your local files, from a direct url or streaming and import/export playlists on M3U format
+
 Available for Linux (Not available for Windows at the moment)
 
 Licensed under GNU/GPL3 or higher.
@@ -28,10 +30,9 @@ Licensed under GNU/GPL3 or higher.
 * Install the dependencies:
   * **From PIP** (with administration permissions): `pip install -r requirements.txt`
   * **Debian/Ubuntu/Mint/MX Linux**:
-    * apt: `apt install python3-pyqt5, python3-pyqt5.qtmultimedia, libqt5multimedia5, libqt5multimedia5-plugins qtgstreamer-plugins-qt5`
-    * Pypi: `pip3 install mutagen`
+    * apt: `apt install python3-pyqt5 python3-pyqt5.qtmultimedia libqt5multimedia5 libqt5multimedia5-plugins qtgstreamer-plugins-qt5 python3-mutagen python3-magic`
   * **Arch Linux/Manjaro**:
-    * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia`
+    * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia python-mutagen python-magic`
 
   * Copy the icon and desktop file:
     * All users:
