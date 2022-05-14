@@ -315,6 +315,7 @@ class Player(QMediaPlayer):
             self.player.play()
 
         self.parent.playButton.setIcon(icon)
+        self.parent.trayPlay.setIcon(icon)
 
     def qmp_mediaStatusChanged(self):
         """ This function is called when the media status is change. """
@@ -325,6 +326,7 @@ class Player(QMediaPlayer):
             icon = QIcon.fromTheme("media-playback-start")
 
         self.parent.playButton.setIcon(icon)
+        self.parent.trayPlay.setIcon(icon)
 
     def qmp_positionChanged(self, position, senderType=False):
         """ This function is called when the time track is change
