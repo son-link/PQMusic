@@ -156,31 +156,38 @@ class Player(QMediaPlayer):
         """ This function is called whenever the metadata changes,
             e.g. track changes or is received during a live stream.
         """
+        self.parent.tray.setToolTip('')
+        artist = None
+        title = None
+
         if self.player.isMetaDataAvailable():
             if self.player.metaData(QMediaMetaData.Title):
                 self.parent.titleLabel.setText(
                     self.player.metaData(QMediaMetaData.Title)
                 )
+                title = self.player.metaData(QMediaMetaData.Title)
             else:
                 file = self.player.currentMedia().canonicalUrl().toString()
 
                 self.parent.titleLabel.setText(
                     Path(file).stem
                 )
+                title = Path(file).stem
 
             if self.player.metaData(QMediaMetaData.AlbumArtist):
                 self.parent.artistLabel.setText(
                     self.player.metaData(QMediaMetaData.AlbumArtist)
                 )
+                artist = self.player.metaData(QMediaMetaData.AlbumArtist)
             elif self.player.metaData(QMediaMetaData.ContributingArtist):
                 artist = self.player.metaData(
                     QMediaMetaData.ContributingArtist
                 )
 
                 if type(artist) is list:
-                    self.parent.artistLabel.setText(artist[0])
-                else:
-                    self.parent.artistLabel.setText(artist)
+                    artist = artist[0]
+
+                self.parent.artistLabel.setText(artist)
             else:
                 self.parent.artistLabel.setText(
                     _translate('MainWindow', 'Unknown')
@@ -204,6 +211,15 @@ class Player(QMediaPlayer):
                 self.parent.labelCover.setPixmap(
                     cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
                 )
+
+        if artist:
+            trayTooltip = '{} - {}'.format(artist, title)
+        else:
+            trayTooltip = title
+
+        if trayTooltip:
+            self.parent.setWindowTitle('PQMusic: ' + trayTooltip)
+            self.parent.tray.setToolTip(trayTooltip)
 
     def openPlaylist(self):
         """ Opens the dialog to select files to add """
