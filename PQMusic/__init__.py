@@ -56,40 +56,40 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
 
         # Menu
-        trayMenu = QtWidgets.QMenu()
+        self.menu = QtWidgets.QMenu()
         self.menuAddFiles = QtWidgets.QAction(
             QIcon.fromTheme('list-add'),
             _translate('MainWindow', 'Add file(s)'),
-            trayMenu
+            self.menu
         )
         self.menuAddFiles.triggered.connect(self.addFiles)
-        trayMenu.addAction(self.menuAddFiles)
+        self.menu.addAction(self.menuAddFiles)
 
         self.menuAddFolder = QtWidgets.QAction(
             QIcon.fromTheme('folder-add'),
             _translate('MainWindow', 'Add folder'),
-            trayMenu
+            self.menu
         )
         self.menuAddFolder.triggered.connect(self.addDir)
-        trayMenu.addAction(self.menuAddFolder)
+        self.menu.addAction(self.menuAddFolder)
 
         self.menuAddUrl = QtWidgets.QAction(
             QIcon.fromTheme('view-links'),
             _translate('MainWindow', 'Add URL'),
-            trayMenu
+            self.menu
         )
         self.menuAddUrl.triggered.connect(self.addUrl)
-        trayMenu.addAction(self.menuAddUrl)
+        self.menu.addAction(self.menuAddUrl)
 
         self.menuAddPL = QtWidgets.QAction(
             QIcon.fromTheme('document-import'),
             _translate('MainWindow', 'Open playlist'),
-            trayMenu
+            self.menu
         )
         self.menuAddPL.triggered.connect(self.player.openPlaylist)
-        trayMenu.addAction(self.menuAddPL)
+        self.menu.addAction(self.menuAddPL)
 
-        self.menuButton.setMenu(trayMenu)
+        self.menuButton.setMenu(self.menu)
 
         # Volume
         icon = QIcon.fromTheme("audio-volume-high")
