@@ -7,7 +7,9 @@ AppDir
 _temp_home
 *.exe
 *.AppImage
-packages/
+packages/**/*.tar.*
+packages/aur/*
+!packages/aur/PKGBUILD
 .qt_for_python/
 .vscode
 *.bck
