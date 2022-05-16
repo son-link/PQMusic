@@ -1,5 +1,6 @@
 from .ui import Ui_gui, open_url_dialog
 from .player import Player
+from .utils import delLockFile
 from PyQt5.QtCore import (
     Qt,
     QCoreApplication,
@@ -169,7 +170,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             _translate('MainWindow', 'Quit'),
             trayMenu
         )
-        closeAction.triggered.connect(sysExit)
+        closeAction.triggered.connect(self.closeEvent)
         trayMenu.addAction(closeAction)
 
         self.tray.setContextMenu(trayMenu)
@@ -298,6 +299,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.clearMetadata()
 
     def closeEvent(self, event):
+        delLockFile()
         sysExit()
 
     def delTracks(self):

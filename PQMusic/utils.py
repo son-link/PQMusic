@@ -2,7 +2,26 @@ from mutagen import File
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from pathlib import Path
-from os import access, R_OK
+from os import access, R_OK, getpid, remove
+
+
+LOCKFILE = '/tmp/pqmusic.lock'
+
+
+def is_running():
+    if Path(LOCKFILE).is_file():
+        return True
+    else:
+        with open(LOCKFILE, 'w') as file:
+            file.write(str(getpid()))
+            file.close()
+
+    return False
+
+
+def delLockFile():
+    if Path(LOCKFILE).is_file():
+        remove(LOCKFILE)
 
 
 def getMetaData(filename):
