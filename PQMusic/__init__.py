@@ -130,6 +130,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         nextAction.triggered.connect(self.player.queueList.next)
         trayMenu.addAction(nextAction)
 
+        trayMenuAddFiles = QtWidgets.QAction(
+            QIcon.fromTheme('list-add'),
+            _translate('MainWindow', 'Add file(s)'),
+            trayMenu
+        )
+        trayMenuAddFiles.triggered.connect(self.addFiles)
+        trayMenu.addAction(trayMenuAddFiles)
+
+        trayMenuAddFolder = QtWidgets.QAction(
+            QIcon.fromTheme('folder-add'),
+            _translate('MainWindow', 'Add folder'),
+            trayMenu
+        )
+        trayMenuAddFolder.triggered.connect(self.addDir)
+        trayMenu.addAction(trayMenuAddFolder)
+
+        trayMenuAddUrl = QtWidgets.QAction(
+            QIcon.fromTheme('view-links'),
+            _translate('MainWindow', 'Add URL'),
+            trayMenu
+        )
+        trayMenuAddUrl.triggered.connect(self.addUrl)
+        trayMenu.addAction(trayMenuAddUrl)
+
+        trayMenuAddPL = QtWidgets.QAction(
+            QIcon.fromTheme('document-import'),
+            _translate('MainWindow', 'Open playlist'),
+            trayMenu
+        )
+        trayMenuAddPL.triggered.connect(self.player.openPlaylist)
+        trayMenu.addAction(trayMenuAddPL)
+
         closeAction = QtWidgets.QAction(
             QIcon.fromTheme('application-exit'),
             _translate('MainWindow', 'Quit'),
@@ -246,6 +278,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.player.queueList.clear()
         self.clearMetadata()
 
+    def closeEvent(self, event):
+        sysExit()
+
     def delTracks(self):
         """ Remove the selected tracks in the playlist """
         model = self.playlistView.selectionModel()
@@ -313,6 +348,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
 def init(custom_theme=True):
     LOCAL_DIR = path.dirname(path.realpath(__file__))
     app = QtWidgets.QApplication([])
+    app.setQuitOnLastWindowClosed(False)
     defaultLocale = QLocale.system().name()
     if defaultLocale.startswith('es_'):
         defaultLocale = 'es'
