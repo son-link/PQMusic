@@ -67,6 +67,14 @@ def openM3U(file):
                 'title':    'Unknown',
                 'notags':   ''
             }
+
+            # Files in M3U format must start with this line.
+            # If it does not, it is not considered as such
+            # and we terminate the function
+            first_line = m3u.readline()
+            if not first_line.startswith('#EXTM3U'):
+                return []
+
             for line in m3u:
                 line = line.rstrip()
                 if not have_info:
