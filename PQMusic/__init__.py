@@ -15,10 +15,12 @@ from PyQt5.QtGui import (
     QStandardItemModel,
     QFontDatabase
 )
-from os import path, listdir
+from os import path, listdir, getcwd
 from sys import exit as sysExit
+from pathlib import Path
 
 _translate = QCoreApplication.translate
+add_files = []
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
@@ -213,6 +215,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             if startPlay:
                 self.player.startPlay()
 
+    def addFilesFromArgs(self, files):
+        if files and len(files) > 0:
+            startPlay = (self.player.queueList.mediaCount() == 0)
+            for file in sorted(files):
+                file = path.join(getcwd(), file)
+                if path.isfile(file):
+                    ext = Path(file).suffix
+                    if ext.startswith('.m3u'):
+                        self.player.openPlaylist(file)
+                    else:
+                        self.player.addFile(file)
+                elif path.isdir(file):
+                    self.scanDir(file)
+
+            if startPlay:
+                self.player.startPlay()
+
     def addUrl(self):
         """ Displays the dialog for adding URLs """
         self.addUrlDialog = open_url_dialog.addDialog(self, self.appendUrl)
@@ -345,8 +364,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.resize_event = True
 
 
-def init(custom_theme=True):
+def init(custom_theme=True, files=[]):
     LOCAL_DIR = path.dirname(path.realpath(__file__))
+
     app = QtWidgets.QApplication([])
     app.setQuitOnLastWindowClosed(False)
     defaultLocale = QLocale.system().name()
@@ -369,6 +389,7 @@ def init(custom_theme=True):
         QIcon.setThemeName('luv')
 
     window = MainWindow()
+    window.addFilesFromArgs(files)
     window.retranslateUi(window)
     window.show()
     app.exec_()

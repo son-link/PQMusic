@@ -221,17 +221,18 @@ class Player(QMediaPlayer):
             self.parent.setWindowTitle('PQMusic: ' + trayTooltip)
             self.parent.tray.setToolTip(trayTooltip)
 
-    def openPlaylist(self):
+    def openPlaylist(self, file=None):
         """ Opens the dialog to select files to add """
-        file, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self.parent,
-            _translate('MainWindow', 'Select playlist to open'),
-            '',
-            _translate(
-                'MainWindow',
-                'Playlists (*.m3u *.m3u8)'
-            ),
-        )
+        if not file:
+            file, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self.parent,
+                _translate('MainWindow', 'Select playlist to open'),
+                '',
+                _translate(
+                    'MainWindow',
+                    'Playlists (*.m3u *.m3u8)'
+                ),
+            )
 
         startPlay = (self.queueList.mediaCount() == 0)
         if file:
