@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=PQMusic
 Comment=A minimal audio player
-Exec=pqmusic
+# Exec=pqmusic
+Exec=pqmusic --files %U
 Terminal=false
 Type=Application
 Icon=pqmusic
 Categories=AudioVideo;Audio;
+MimeType=application/ogg;application/x-cue;application/x-ogg;audio/aac;audio/flac;audio/midi;audio/mp3;audio/mp4;audio/mpeg;audio/mpegurl;audio/ogg;audio/prs.sid;audio/wav;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-ms-wma;audio/x-vorbis+ogg;audio/x-wav;audio/x-wavpack;
