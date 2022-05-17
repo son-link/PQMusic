@@ -37,6 +37,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.plModel = QStandardItemModel()
         self.playlistView.setModel(self.plModel)
         self.resize_event = False
+        self.setAcceptDrops(True)
 
         # Hide the playlisy layout
         self.blockSignals(True)
@@ -283,6 +284,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
         )
 
+        self.setWindowTitle('PQMusic')
+        self.tray.setToolTip('PQMusic')
+
         self.queuePrevButton.setEnabled(False)
         self.queueNextButton.setEnabled(False)
         self.playButton.setEnabled(False)
@@ -315,6 +319,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             pos = item.row()
             self.playlistView.model().removeRow(pos)
             self.player.delete(pos)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        files = [u.toLocalFile() for u in event.mimeData().urls()]
+        if len(files) > 0:
+            self.addFilesFromArgs(files)
 
     def hideShowMW(self):
         """ Show/Hide the main window """
