@@ -11,11 +11,20 @@
 
 ![PQMusic screenshoot](screenshoot.jpg)
 
-PQMusic is a minimalistic and easy to use audio player for download and use.
+PQMusic is a minimalist and easy to use audio player for download and use.
 
-You can play your local files, from a direct url or streaming and import/export playlists on M3U format
+You can play your local files, from a direct url or streaming (for example a online radio) and import/export playlists on M3U format.
 
-Available for Linux (Not available for Windows at the moment)
+Adding files from Open with on your file manager
+![Add files from Open with on your file manager](file-manager-menu.png)
+
+Drag and drop files to PQMusic's window:
+
+<video controls style="max-width: 720px">
+  <source src="pqmusic-drag-drop.mp4" />
+</video>
+
+Only available for Linux.
 
 Licensed under GNU/GPL3 or higher.
 

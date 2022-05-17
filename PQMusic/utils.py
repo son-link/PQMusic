@@ -9,6 +9,11 @@ LOCKFILE = '/tmp/pqmusic.lock'
 
 
 def is_running():
+    """ Checks if an instance of the application is already running
+
+    Returns:
+        boolean: True is running, False is not
+    """
     if Path(LOCKFILE).is_file():
         return True
     else:
@@ -20,6 +25,8 @@ def is_running():
 
 
 def delLockFile():
+    """ Delete the lockfile
+    """
     if Path(LOCKFILE).is_file():
         remove(LOCKFILE)
 

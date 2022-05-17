@@ -218,6 +218,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
                 self.player.startPlay()
 
     def addFilesFromArgs(self, files):
+        """ Add files from command lines arguments and drag and drop
+
+        Args:
+            files (array): A array of files and/or folders
+        """
         if files and len(files) > 0:
             startPlay = (self.player.queueList.mediaCount() == 0)
             for file in sorted(files):
@@ -303,6 +308,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.clearMetadata()
 
     def closeEvent(self, event):
+        """ This function is called when closing the main window
+            or selecting Exit from the icon menu on the system tray.
+
+        Args:
+            event (QEvent): The event
+        """
         delLockFile()
         sysExit()
 
@@ -327,6 +338,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             event.ignore()
 
     def dropEvent(self, event):
+        """ This function is called when dragging files
+            and/or folders to the window to add them.
+
+        Args:
+            event (QEvent): The event
+        """
         files = [u.toLocalFile() for u in event.mimeData().urls()]
         if len(files) > 0:
             self.addFilesFromArgs(files)
