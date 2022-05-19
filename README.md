@@ -65,6 +65,11 @@ For example: `yay -S pqmusic`
 
 You can download a **AppImage** for **GNU/Linux** on [releases page](https://github.com/son-link/PQMusic/releases)
 
+### Command line options:
+
+* `--custom-theme`: Use the application's theme instead of using the environment or default Qt theme
+* `-f | --files <files and/or dirs>`: Add files and/or directories for direct playback at startup
+
 ## Other credits:
 
 * Lüv icons theme: https://github.com/Nitrux/luv-icon-theme
