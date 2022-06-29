@@ -10,11 +10,18 @@ from PyQt5 import QtWidgets
 from pathlib import Path
 from .utils import getMetaData, openM3U, saveM3U
 from urllib.parse import urlparse
-from os import path, access, R_OK
+from os import path, access, R_OK, mkdir, environ
+from .sys_notify import Notification, init
 
 import magic
 
 _translate = QCoreApplication.translate
+LOCAL_DIR = path.dirname(path.realpath(__file__))
+COVER_CACHE = environ['HOME'] + '/.cache/pqmusic'
+print(COVER_CACHE)
+
+if not path.exists(COVER_CACHE):
+    mkdir(COVER_CACHE)
 
 
 def ms_to_time(t):
@@ -42,6 +49,8 @@ class Player(QMediaPlayer):
         self.position = 0
         self.prevPosition = -1
         self.volume = 100
+
+        init('pqmusic')
 
         self.player.mediaStatusChanged.connect(self.qmp_mediaStatusChanged)
         self.player.metaDataChanged.connect(self.metaDataChanged)
@@ -159,7 +168,9 @@ class Player(QMediaPlayer):
         self.parent.tray.setToolTip('')
         artist = None
         title = None
+        notifyIcon = LOCAL_DIR + '/icon.svg'
 
+        file = self.player.currentMedia().canonicalUrl().toString()
         if self.player.isMetaDataAvailable():
             if self.player.metaData(QMediaMetaData.Title):
                 self.parent.titleLabel.setText(
@@ -167,8 +178,6 @@ class Player(QMediaPlayer):
                 )
                 title = self.player.metaData(QMediaMetaData.Title)
             else:
-                file = self.player.currentMedia().canonicalUrl().toString()
-
                 self.parent.titleLabel.setText(
                     Path(file).stem
                 )
@@ -206,6 +215,10 @@ class Player(QMediaPlayer):
                     transformMode=Qt.SmoothTransformation
                 )
                 self.parent.labelCover.setPixmap(scaledCover)
+                coverName = Path(file).stem + '.png'
+                notifyIcon = COVER_CACHE + '/' + coverName
+                if not path.isfile(notifyIcon):
+                    scaledCover.save(notifyIcon, 'PNG')
             else:
                 cover = QPixmap(':/no_cover.svg')
                 self.parent.labelCover.setPixmap(
@@ -220,6 +233,15 @@ class Player(QMediaPlayer):
         if trayTooltip:
             self.parent.setWindowTitle('PQMusic: ' + trayTooltip)
             self.parent.tray.setToolTip(trayTooltip)
+
+            if self.parent.config['shownotify']:
+                n = Notification(
+                    'PQMusic',
+                    trayTooltip,
+                    notifyIcon,
+                    timeout=3000
+                )
+                n.show()
 
     def openPlaylist(self, file=None):
         """ Opens the dialog to select files to add """

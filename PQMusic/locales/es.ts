@@ -2,6 +2,39 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="es_ES" sourcelanguage="en_US">
 <context>
+    <name>Config_Dialog</name>
+    <message>
+        <location filename="../config.py" line="103"/>
+        <source>Select music folder</source>
+        <translation>Seleccionar carpeta de la música</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="56"/>
+        <source>Config PQMusic</source>
+        <translation>Configurar PQMusic</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="57"/>
+        <source>Minimize to system tray when closing window</source>
+        <translation>Minimizar a la bandeja del sistema al cerrar la ventana</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="58"/>
+        <source>Show notifications when changing songs</source>
+        <translation>Mostrar notificaciones al cambiar de canción</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="59"/>
+        <source>Select folder</source>
+        <translation>Seleccionar carpeta</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="60"/>
+        <source>Default music folder:</source>
+        <translation>Carpeta por defecto de la música:</translation>
+    </message>
+</context>
+<context>
     <name>Dialog</name>
     <message>
         <location filename="../ui/Ui_add_url_dialog.py" line="53"/>
@@ -17,27 +50,27 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../__init__.py" line="60"/>
+        <location filename="../__init__.py" line="147"/>
         <source>Add file(s)</source>
         <translation>Añadir fichero(s)</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="68"/>
+        <location filename="../__init__.py" line="155"/>
         <source>Add folder</source>
         <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="166"/>
+        <location filename="../__init__.py" line="212"/>
         <source>Select file to open</source>
         <translation>Seleccionar fichero a abrir</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="166"/>
+        <location filename="../__init__.py" line="212"/>
         <source>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)</source>
         <translation>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="151"/>
+        <location filename="../__init__.py" line="197"/>
         <source>Select folder</source>
         <translation>Seleccionar carpeta</translation>
     </message>
@@ -57,54 +90,59 @@
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../player.py" line="183"/>
+        <location filename="../player.py" line="193"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="76"/>
+        <location filename="../__init__.py" line="163"/>
         <source>Add URL</source>
         <translation>Añadir URL</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="109"/>
+        <location filename="../__init__.py" line="123"/>
         <source>Play/Pause</source>
         <translation>Reproducir/Pausar</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="117"/>
+        <location filename="../__init__.py" line="131"/>
         <source>Previous track</source>
         <translation>Pista anterior</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="125"/>
+        <location filename="../__init__.py" line="139"/>
         <source>Next track</source>
         <translation>Siguiente pista</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="133"/>
+        <location filename="../__init__.py" line="179"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="208"/>
+        <location filename="../player.py" line="231"/>
         <source>Select playlist to open</source>
         <translation>Selecciona la lista de reproducción a abrir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="328"/>
+        <location filename="../player.py" line="357"/>
         <source>Playlists (*.m3u *.m3u8)</source>
         <translation>Lista de reprución (*.m3u *.m3u8)</translation>
     </message>
     <message>
-        <location filename="../player.py" line="328"/>
+        <location filename="../player.py" line="357"/>
         <source>Save the playlist</source>
         <translation>Guardar lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="84"/>
+        <location filename="../__init__.py" line="171"/>
         <source>Open playlist</source>
         <translation>Abrir lista de reproducción</translation>
+    </message>
+    <message>
+        <location filename="../__init__.py" line="98"/>
+        <source>Configure</source>
+        <translation>Configurar</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,7 @@
 from .ui import Ui_gui, open_url_dialog
 from .player import Player
 from .utils import delLockFile
+from .config import ConfigDialog
 from PyQt5.QtCore import (
     Qt,
     QCoreApplication,
@@ -38,6 +39,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.playlistView.setModel(self.plModel)
         self.resize_event = False
         self.setAcceptDrops(True)
+        self.config = ConfigDialog.loadConf()
 
         # Hide the playlisy layout
         self.blockSignals(True)
@@ -92,6 +94,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         )
         self.menuAddPL.triggered.connect(self.player.openPlaylist)
         self.menu.addAction(self.menuAddPL)
+
+        self.menuConfig = QtWidgets.QAction(
+            QIcon.fromTheme('configure'),
+            _translate('MainWindow', 'Configure'),
+            self.menu
+        )
+        self.menuConfig.triggered.connect(self.openConfig)
+        self.menu.addAction(self.menuConfig)
 
         self.menuButton.setMenu(self.menu)
 
@@ -166,6 +176,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         trayMenuAddPL.triggered.connect(self.player.openPlaylist)
         trayMenu.addAction(trayMenuAddPL)
 
+        trayMenuConfig = QtWidgets.QAction(
+            QIcon.fromTheme('configure'),
+            _translate('MainWindow', 'Configure'),
+            trayMenu
+        )
+        trayMenuConfig.triggered.connect(self.openConfig)
+        trayMenu.addAction(trayMenuConfig)
+
         closeAction = QtWidgets.QAction(
             QIcon.fromTheme('application-exit'),
             _translate('MainWindow', 'Quit'),
@@ -187,7 +205,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         folder = QtWidgets.QFileDialog.getExistingDirectory(
             self,
             _translate('MainWindow', 'Select folder'),
-            '',
+            self.config['musicfolder'],
             QtWidgets.QFileDialog.ShowDirsOnly
         )
 
@@ -202,7 +220,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         files, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self,
             _translate('MainWindow', 'Select file to open'),
-            '',
+            self.config['musicfolder'],
             _translate(
                 'MainWindow',
                 'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)'
@@ -314,8 +332,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         Args:
             event (QEvent): The event
         """
-        delLockFile()
-        sysExit()
+        if event and self.config['mintosystray']:
+            self.hide()
+            self.isMWShow = False
+            event.ignore()
+        else:
+            delLockFile()
+            sysExit()
 
     def delTracks(self):
         """ Remove the selected tracks in the playlist """
@@ -356,6 +379,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         else:
             self.show()
             self.isMWShow = True
+
+    def openConfig(self):
+        configDialog = ConfigDialog(self)
+        configDialog.open()
 
     def scanDir(self, folder):
         """ Scan the specified folder and its subfolders for supported files
