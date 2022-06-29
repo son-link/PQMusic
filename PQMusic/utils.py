@@ -2,26 +2,15 @@ from mutagen import File
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from pathlib import Path
-from os import access, R_OK, getpid, remove
-
+from os import (
+    access,
+    R_OK,
+    getpid,
+    remove
+)
+import psutil
 
 LOCKFILE = '/tmp/pqmusic.lock'
-
-
-def is_running():
-    """ Checks if an instance of the application is already running
-
-    Returns:
-        boolean: True is running, False is not
-    """
-    if Path(LOCKFILE).is_file():
-        return True
-    else:
-        with open(LOCKFILE, 'w') as file:
-            file.write(str(getpid()))
-            file.close()
-
-    return False
 
 
 def delLockFile():
@@ -29,6 +18,26 @@ def delLockFile():
     """
     if Path(LOCKFILE).is_file():
         remove(LOCKFILE)
+
+
+def checkIfRuning():
+    """ Checks if an instance of the application is already running.
+        If this is the case and the -f|--force parameter is not passed
+        to the program, it closes.
+    """
+
+    if Path(LOCKFILE).is_file():
+        with open(LOCKFILE, 'r') as file:
+            pid = file.read()
+            pid = int(pid)
+            file.close()
+            if psutil.pid_exists(pid):
+                exit()
+    else:
+        with open(LOCKFILE, 'w') as file:
+            file.write(str(getpid()))
+            file.close()
+            return False
 
 
 def getMetaData(filename):

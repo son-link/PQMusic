@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 import argparse
 import PQMusic
-from sys import exit
 
 # Prevent running the app more once instance
-if PQMusic.utils.is_running():
-    exit()
+PQMusic.utils.checkIfRuning()
 
 parser = argparse.ArgumentParser(description='PQMusic')
 parser.add_argument('--custom-theme', action='store_true',

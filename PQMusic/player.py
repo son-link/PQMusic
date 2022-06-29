@@ -18,7 +18,6 @@ import magic
 _translate = QCoreApplication.translate
 LOCAL_DIR = path.dirname(path.realpath(__file__))
 COVER_CACHE = environ['HOME'] + '/.cache/pqmusic'
-print(COVER_CACHE)
 
 if not path.exists(COVER_CACHE):
     mkdir(COVER_CACHE)
