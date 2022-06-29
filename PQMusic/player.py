@@ -248,7 +248,7 @@ class Player(QMediaPlayer):
             file, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self.parent,
                 _translate('MainWindow', 'Select playlist to open'),
-                '',
+                self.parent.config['musicfolder'],
                 _translate(
                     'MainWindow',
                     'Playlists (*.m3u *.m3u8)'
@@ -374,7 +374,7 @@ class Player(QMediaPlayer):
         file, _ = QtWidgets.QFileDialog.getSaveFileName(
             self.parent,
             _translate('MainWindow', 'Save the playlist'),
-            '',
+            self.parent.config['musicfolder'],
             _translate(
                 'MainWindow',
                 'Playlists (*.m3u *.m3u8)'

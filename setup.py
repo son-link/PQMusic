@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pqmusic",
-    version="1.0.0",
+    version="1.1.0",
     description="A minimal music player.",
     author="Alfonso Saavedra 'Son Link'",
     author_email='sonlink.dourden@gmail.com',
@@ -27,7 +27,7 @@ setup(
         'pyqt5',
         'mutagen',
         'python-magic',
-        'requests'
+        'psutil'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
