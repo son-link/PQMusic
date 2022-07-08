@@ -66,8 +66,8 @@
     </message>
     <message>
         <location filename="../__init__.py" line="212"/>
-        <source>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)</source>
-        <translation>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)</translation>
+        <source>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</source>
+        <translation>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</translation>
     </message>
     <message>
         <location filename="../__init__.py" line="197"/>
