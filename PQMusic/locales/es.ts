@@ -4,7 +4,7 @@
 <context>
     <name>Config_Dialog</name>
     <message>
-        <location filename="../config.py" line="103"/>
+        <location filename="../config.py" line="102"/>
         <source>Select music folder</source>
         <translation>Seleccionar carpeta de la música</translation>
     </message>
@@ -60,17 +60,12 @@
         <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="212"/>
+        <location filename="../__init__.py" line="220"/>
         <source>Select file to open</source>
         <translation>Seleccionar fichero a abrir</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="212"/>
-        <source>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</source>
-        <translation>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</translation>
-    </message>
-    <message>
-        <location filename="../__init__.py" line="197"/>
+        <location filename="../__init__.py" line="205"/>
         <source>Select folder</source>
         <translation>Seleccionar carpeta</translation>
     </message>
@@ -90,7 +85,7 @@
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../player.py" line="193"/>
+        <location filename="../player.py" line="200"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
@@ -115,22 +110,22 @@
         <translation>Siguiente pista</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="179"/>
+        <location filename="../__init__.py" line="187"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="231"/>
+        <location filename="../player.py" line="248"/>
         <source>Select playlist to open</source>
         <translation>Selecciona la lista de reproducción a abrir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="357"/>
+        <location filename="../player.py" line="374"/>
         <source>Playlists (*.m3u *.m3u8)</source>
         <translation>Lista de reprución (*.m3u *.m3u8)</translation>
     </message>
     <message>
-        <location filename="../player.py" line="357"/>
+        <location filename="../player.py" line="374"/>
         <source>Save the playlist</source>
         <translation>Guardar lista de reproducción</translation>
     </message>
@@ -140,9 +135,14 @@
         <translation>Abrir lista de reproducción</translation>
     </message>
     <message>
-        <location filename="../__init__.py" line="98"/>
+        <location filename="../__init__.py" line="179"/>
         <source>Configure</source>
         <translation>Configurar</translation>
+    </message>
+    <message>
+        <location filename="../__init__.py" line="220"/>
+        <source>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</source>
+        <translation>Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)</translation>
     </message>
 </context>
 </TS>
