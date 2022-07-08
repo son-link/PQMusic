@@ -223,7 +223,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.config['musicfolder'],
             _translate(
                 'MainWindow',
-                'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav)'
+                'Audio (*.mp3 *.ogg *.opus *.aac *.m4a *.flac *.wav *.mod *.s3m *.it *.xm)'
             ),
         )
 
