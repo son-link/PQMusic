@@ -10,10 +10,11 @@ from PyQt5 import QtWidgets
 from pathlib import Path
 from .utils import getMetaData, openM3U, saveM3U
 from urllib.parse import urlparse
-from os import path, access, R_OK, mkdir, environ
+from os import path, access, R_OK, mkdir, environ, listdir
 from .sys_notify import Notification, init
 
 import magic
+import re
 
 _translate = QCoreApplication.translate
 LOCAL_DIR = path.dirname(path.realpath(__file__))
@@ -167,9 +168,12 @@ class Player(QMediaPlayer):
         self.parent.tray.setToolTip('')
         artist = None
         title = None
+        cover = None
         notifyIcon = LOCAL_DIR + '/icon.svg'
 
         file = self.player.currentMedia().canonicalUrl().toString()
+        currentFolder = str(Path(file).parent).replace('file:', '')
+
         if self.player.isMetaDataAvailable():
             if self.player.metaData(QMediaMetaData.Title):
                 self.parent.titleLabel.setText(
@@ -219,6 +223,23 @@ class Player(QMediaPlayer):
                 if not path.isfile(notifyIcon):
                     scaledCover.save(notifyIcon, 'PNG')
             else:
+                # Buscar caratula
+                coverRegex = re.compile(
+                    "(albumartsmall|cover|folder).(jpg|png)",
+                    re.IGNORECASE
+                )
+
+                for f in sorted(listdir(currentFolder)):
+                    findCover = re.search(coverRegex, f)
+                    if findCover:
+                        coverFile = path.join(currentFolder, f)
+                        cover = QPixmap(coverFile)
+                        self.parent.labelCover.setPixmap(
+                            cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
+                        )
+                        notifyIcon = coverFile
+
+            if not cover:
                 cover = QPixmap(':/no_cover.svg')
                 self.parent.labelCover.setPixmap(
                     cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
