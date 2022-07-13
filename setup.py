@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pqmusic",
-    version="1.1.0",
+    version="1.1.1",
     description="A minimal music player.",
     author="Alfonso Saavedra 'Son Link'",
     author_email='sonlink.dourden@gmail.com',
@@ -21,7 +21,7 @@ setup(
             'icons/luv-icon-theme'
         ]
     },
-    download_url='https://github.com/son-link/PQMusic/archive/refs/tags/v.0.3.0.tar.gz',
+    download_url='https://github.com/son-link/PQMusic/archive/refs/tags/v.1.1.1.tar.gz',
     keywords=['music', 'audio', 'player'],
     install_requires=[
         'pyqt5',
@@ -42,7 +42,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Intended Audience :: End Users/Desktop',
-        'Operating System :: OS Independent'
+        'Operating System :: POSIX :: Linux'
     ],
 )
