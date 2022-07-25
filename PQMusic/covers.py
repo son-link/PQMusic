@@ -29,10 +29,13 @@ def getData(url, params=None):
     else:
         full_url = url
 
-    with request.urlopen(full_url) as response:
-        rawData = response.read().decode('utf-8')
-        data = json.loads(rawData)
-        return data
+    try:
+        with request.urlopen(full_url) as response:
+            rawData = response.read().decode('utf-8')
+            data = json.loads(rawData)
+            return data
+    except error.HTTPError:
+        return False
 
 
 class searchTrackInfo(QThread):
@@ -49,7 +52,8 @@ class searchTrackInfo(QThread):
 
     def run(self):
         data = getData(self.url, self.params)
-        self.result.emit(data)
+        if data:
+            self.result.emit(data)
 
 
 class downCover(QThread):

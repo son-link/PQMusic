@@ -33,33 +33,6 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QCheckBox" name="minimizeToTray">
-     <property name="text">
-      <string>Minimize to system tray when closing window</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QCheckBox" name="notifyOnChange">
-     <property name="text">
-      <string>Show notifications when changing songs</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLineEdit" name="musicFolderEdit"/>
-   </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="setMusicFolderBtn">
      <property name="text">
@@ -71,6 +44,40 @@
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Default music folder:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="minimizeToTray">
+     <property name="text">
+      <string>Minimize to system tray when closing window</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLineEdit" name="musicFolderEdit"/>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QCheckBox" name="notifyOnChange">
+     <property name="text">
+      <string>Show notifications when changing songs</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QCheckBox" name="cbDownCover">
+     <property name="text">
+      <string>Download cover if not found locally</string>
      </property>
     </widget>
    </item>
