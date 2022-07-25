@@ -4,34 +4,39 @@
 <context>
     <name>Config_Dialog</name>
     <message>
-        <location filename="../config.py" line="102"/>
+        <location filename="../config.py" line="112"/>
         <source>Select music folder</source>
         <translation>Seleccionar carpeta de la música</translation>
     </message>
     <message>
-        <location filename="../ui/Ui_config.py" line="56"/>
+        <location filename="../ui/Ui_config.py" line="59"/>
         <source>Config PQMusic</source>
         <translation>Configurar PQMusic</translation>
     </message>
     <message>
-        <location filename="../ui/Ui_config.py" line="57"/>
+        <location filename="../ui/Ui_config.py" line="62"/>
         <source>Minimize to system tray when closing window</source>
         <translation>Minimizar a la bandeja del sistema al cerrar la ventana</translation>
     </message>
     <message>
-        <location filename="../ui/Ui_config.py" line="58"/>
+        <location filename="../ui/Ui_config.py" line="63"/>
         <source>Show notifications when changing songs</source>
         <translation>Mostrar notificaciones al cambiar de canción</translation>
     </message>
     <message>
-        <location filename="../ui/Ui_config.py" line="59"/>
+        <location filename="../ui/Ui_config.py" line="60"/>
         <source>Select folder</source>
         <translation>Seleccionar carpeta</translation>
     </message>
     <message>
-        <location filename="../ui/Ui_config.py" line="60"/>
+        <location filename="../ui/Ui_config.py" line="61"/>
         <source>Default music folder:</source>
         <translation>Carpeta por defecto de la música:</translation>
+    </message>
+    <message>
+        <location filename="../ui/Ui_config.py" line="64"/>
+        <source>Download cover if not found locally</source>
+        <translation>Descargar caratula si no se encuentra localmente</translation>
     </message>
 </context>
 <context>
@@ -85,7 +90,7 @@
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="../player.py" line="200"/>
+        <location filename="../player.py" line="208"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
@@ -115,17 +120,17 @@
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="248"/>
+        <location filename="../player.py" line="308"/>
         <source>Select playlist to open</source>
         <translation>Selecciona la lista de reproducción a abrir</translation>
     </message>
     <message>
-        <location filename="../player.py" line="374"/>
+        <location filename="../player.py" line="435"/>
         <source>Playlists (*.m3u *.m3u8)</source>
         <translation>Lista de reprución (*.m3u *.m3u8)</translation>
     </message>
     <message>
-        <location filename="../player.py" line="374"/>
+        <location filename="../player.py" line="435"/>
         <source>Save the playlist</source>
         <translation>Guardar lista de reproducción</translation>
     </message>
