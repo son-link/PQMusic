@@ -60,6 +60,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.suffleButton.clicked.connect(self.player.switchRandomMode)
         self.timeSlider.valueChanged.connect(self.player.setPosition)
         self.volumeSlider.valueChanged.connect(self.player.setVolume)
+        self.menuButton.clicked.connect(self.menuButton.showMenu)
 
         # Menu
         self.menu = QtWidgets.QMenu()
