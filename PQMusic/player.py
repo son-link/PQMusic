@@ -12,6 +12,7 @@ from .utils import getMetaData, openM3U, saveM3U
 from urllib.parse import urlparse
 from os import path, access, R_OK, mkdir, environ, listdir
 from .sys_notify import Notification, init
+from .covers import searchTrackInfo, downCover
 
 import magic
 import re
@@ -49,6 +50,7 @@ class Player(QMediaPlayer):
         self.position = 0
         self.prevPosition = -1
         self.volume = 100
+        self.blockCoverSearch = False
 
         init('pqmusic')
 
@@ -108,6 +110,7 @@ class Player(QMediaPlayer):
         """
         self.queueList.setCurrentIndex(pos)
         self.playlistPosChanged()
+
         if (
             self.player.state() == QMediaPlayer.StoppedState or
             self.player.state() == QMediaPlayer.PausedState
@@ -168,6 +171,7 @@ class Player(QMediaPlayer):
         self.parent.tray.setToolTip('')
         artist = None
         title = None
+        album = None
         cover = None
         notifyIcon = LOCAL_DIR + '/icon.svg'
 
@@ -205,9 +209,15 @@ class Player(QMediaPlayer):
                     _translate('MainWindow', 'Unknown')
                 )
 
-            self.parent.albumLabel.setText(
-                self.player.metaData(QMediaMetaData.AlbumTitle)
-            )
+            if self.player.metaData(QMediaMetaData.AlbumTitle):
+                album = self.player.metaData(QMediaMetaData.AlbumTitle)
+                self.parent.albumLabel.setText(album)
+
+            release = title
+            if album:
+                release = album
+
+            downCoverFile = '{}/{}-{}.jpg'.format(COVER_CACHE, artist, release)
 
             if self.player.metaData(QMediaMetaData.CoverArtImage):
                 cover = self.player.metaData(QMediaMetaData.CoverArtImage)
@@ -222,6 +232,14 @@ class Player(QMediaPlayer):
                 notifyIcon = COVER_CACHE + '/' + coverName
                 if not path.isfile(notifyIcon):
                     scaledCover.save(notifyIcon, 'PNG')
+
+            elif path.isfile(downCoverFile):
+                cover = QPixmap(downCoverFile)
+                self.parent.labelCover.setPixmap(
+                    cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
+                )
+                notifyIcon = downCoverFile
+
             else:
                 # Buscar caratula
                 coverRegex = re.compile(
@@ -238,6 +256,26 @@ class Player(QMediaPlayer):
                             cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
                         )
                         notifyIcon = coverFile
+
+            def __getcover(data):
+                if len(data['releases']) > 0:
+                    albumId = data['releases'][0]['id']
+                    thread = downCover(
+                        self.parent, albumId,
+                        '{}/{}-{}.jpg'.format(COVER_CACHE, artist, release)
+                    )
+                    thread.downloaded.connect(self.setDownCover)
+                    thread.start()
+
+            if (
+                not cover and
+                not self.blockCoverSearch and
+                not path.isfile(downCoverFile)
+            ):
+                thread = searchTrackInfo(artist, release)
+                thread.result.connect(__getcover)
+                thread.start()
+                self.blockCoverSearch = True
 
             if not cover:
                 cover = QPixmap(':/no_cover.svg')
@@ -308,6 +346,7 @@ class Player(QMediaPlayer):
         self.parent.timeSlider.setEnabled(False)
         if self.queueList.mediaCount() > 0:
             pos = self.queueList.currentIndex()
+            self.blockCoverSearch = False
 
             if self.queueList.mediaCount() > 1:
                 if pos < self.queueList.mediaCount() - 1:
@@ -403,6 +442,13 @@ class Player(QMediaPlayer):
         )
         if file:
             saveM3U(self, file, self.queueData)
+
+    def setDownCover(self, coverFile):
+        if coverFile:
+            cover = QPixmap(coverFile)
+            self.parent.labelCover.setPixmap(
+                cover.scaled(QSize(128, 128), Qt.KeepAspectRatio)
+            )
 
     def setPosition(self, pos):
         """ Change the playlist position
