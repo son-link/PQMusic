@@ -48,6 +48,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.blockSignals(False)
         self.resize_event = True
 
+        self.listAddButton.clicked.connect(self.addFiles)
         self.listClearButton.clicked.connect(self.clearPlaylist)
         self.listRemoveButton.clicked.connect(self.delTracks)
         self.playButton.clicked.connect(self.player.playPause)

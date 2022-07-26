@@ -409,6 +409,19 @@
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="playlistBtnLayout">
          <item>
+          <widget class="QPushButton" name="listAddButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="list-add"/>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="listRemoveButton">
            <property name="text">
             <string/>
