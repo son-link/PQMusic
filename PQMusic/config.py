@@ -50,8 +50,16 @@ class ConfigDialog(QtWidgets.QDialog):
             self.ui.minimizeToTray.setChecked(True)
 
         self.ui.cbDownCover.setChecked(False)
-        if self.config['downcover'] == 1:
+        if 'sdowncover' in self.config and self.config['downcover'] == 1:
             self.ui.cbDownCover.setChecked(True)
+
+        self.ui.cbSaveVolume.setChecked(False)
+        if 'savevolume' in self.config and self.config['savevolume'] == 1:
+            self.ui.cbSaveVolume.setChecked(True)
+            
+        self.ui.cbSaveVolume.setChecked(False)
+        if 'saveplaylist' in self.config and self.config['saveplaylist'] == 1:
+            self.ui.cbSavePlaylist.setChecked(True)
 
         self.exec_()
 
@@ -60,7 +68,7 @@ class ConfigDialog(QtWidgets.QDialog):
         if not path.isfile(configfile):
             f = open(configfile, 'w')
             f.write(
-                "[pqmusic]\nmusicfolder={}\nshownotify=0\nmintosystray=0\ndowncover=0"
+                "[pqmusic]\nmusicfolder={}\nshownotify=0\nmintosystray=0\ndowncover=0\nsavevolume=0\nsaveplaylist=0"
                 .format(environ['HOME'])
             )
             f.close()
@@ -74,6 +82,8 @@ class ConfigDialog(QtWidgets.QDialog):
             config['shownotify'] = int(cfg.get('pqmusic', 'shownotify'))
             config['mintosystray'] = int(cfg.get('pqmusic', 'mintosystray'))
             config['downcover'] = int(cfg.get('pqmusic', 'downcover'))
+            config['savevolume'] = int(cfg.get('pqmusic', 'savevolume'))
+            config['saveplaylist'] = int(cfg.get('pqmusic', 'saveplaylist'))
 
         except configparser.NoOptionError:
             print('Error')
@@ -95,11 +105,21 @@ class ConfigDialog(QtWidgets.QDialog):
             cfg.set('pqmusic', 'mintosystray', '1')
         else:
             cfg.set('pqmusic', 'mintosystray', '0')
-            
+
         if self.ui.cbDownCover.isChecked():
             cfg.set('pqmusic', 'downcover', '1')
         else:
             cfg.set('pqmusic', 'downcover', '0')
+
+        if self.ui.cbSaveVolume.isChecked():
+            cfg.set('pqmusic', 'savevolume', '1')
+        else:
+            cfg.set('pqmusic', 'savevolume', '0')
+            
+        if self.ui.cbSavePlaylist.isChecked():
+            cfg.set('pqmusic', 'saveplaylist', '1')
+        else:
+            cfg.set('pqmusic', 'saveplaylist', '0')
 
         with open(configfile, "w") as file:
             cfg.write(file)

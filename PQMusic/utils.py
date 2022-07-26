@@ -6,11 +6,14 @@ from os import (
     access,
     R_OK,
     getpid,
-    remove
+    remove,
+    environ,
 )
+from os.path import isfile
 import psutil
 
 LOCKFILE = '/tmp/pqmusic.lock'
+COVER_CACHE = environ['HOME'] + '/.cache/pqmusic'
 
 
 def delLockFile():
@@ -149,7 +152,7 @@ def saveM3U(self, filename, playlist):
         with open(filename, 'w') as file:
             file.write("#EXTM3U\n")
             for data in playlist:
-                if not data['notags']:
+                if 'notags' not in data:
                     file.write("#EXTINF:{},{} - {}\n".format(
                         data['duration'],
                         data['artist'],
@@ -162,3 +165,21 @@ def saveM3U(self, filename, playlist):
             filename,
             x.strerror
         ))
+
+
+def saveVolume(volume):
+    with open(COVER_CACHE + '/volume', 'w') as f:
+        f.write(str(volume))
+        f.close()
+
+
+def getSaveVolume():
+    volfile = COVER_CACHE + '/volume'
+    if not isfile(volfile):
+        return 100
+
+    with open(volfile, 'r') as f:
+        volume = int(f.readline())
+        f.close()
+        remove(volfile)
+        return volume

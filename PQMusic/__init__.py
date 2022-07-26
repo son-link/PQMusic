@@ -1,6 +1,12 @@
 from .ui import Ui_gui, open_url_dialog
 from .player import Player
-from .utils import delLockFile
+from .utils import (
+    delLockFile,
+    saveVolume,
+    getSaveVolume,
+    saveM3U,
+    COVER_CACHE
+)
 from .config import ConfigDialog
 from PyQt5.QtCore import (
     Qt,
@@ -17,9 +23,11 @@ from PyQt5.QtGui import (
     QStandardItemModel,
     QFontDatabase
 )
-from os import path, listdir, getcwd
+from os import path, listdir, remove
 from sys import exit as sysExit
 from pathlib import Path
+from time import sleep
+
 
 _translate = QCoreApplication.translate
 add_files = []
@@ -200,6 +208,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.tray.setVisible(True)
         self.tray.activated.connect(self.hideShowMW)
 
+        if 'savevolume' in self.config and self.config['savevolume']:
+            volume = getSaveVolume()
+            self.volumeSlider.setValue(volume)
+
+        if 'saveplaylist' in self.config and self.config['saveplaylist']:
+            pl = COVER_CACHE + '/playlist.m3u8'
+            if path.isfile(pl):
+                self.player.openPlaylist(pl)
+                #remove(pl)
+
     def addDir(self):
         """ Opens the dialog to select a folder to add the supported files inside it,
             as well as subdirectories.
@@ -340,6 +358,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             event.ignore()
         else:
             delLockFile()
+            if 'savevolume' in self.config and self.config['savevolume']:
+                saveVolume(self.volumeSlider.value())
+
+            if 'saveplaylist' in self.config and self.config['saveplaylist']:
+                saveM3U(self, COVER_CACHE + '/playlist.m3u8', self.player.queueData)
+
             sysExit()
 
     def delTracks(self):
