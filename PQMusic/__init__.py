@@ -23,10 +23,9 @@ from PyQt5.QtGui import (
     QStandardItemModel,
     QFontDatabase
 )
-from os import path, listdir, remove
+from os import path, listdir, remove, getcwd
 from sys import exit as sysExit
 from pathlib import Path
-from time import sleep
 
 
 _translate = QCoreApplication.translate
