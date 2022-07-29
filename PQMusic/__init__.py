@@ -211,12 +211,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             volume = getSaveVolume()
             self.volumeSlider.setValue(volume)
 
-        if 'saveplaylist' in self.config and self.config['saveplaylist']:
-            pl = COVER_CACHE + '/playlist.m3u8'
-            if path.isfile(pl):
-                self.player.openPlaylist(pl)
-                #remove(pl)
-
     def addDir(self):
         """ Opens the dialog to select a folder to add the supported files inside it,
             as well as subdirectories.
@@ -260,6 +254,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         Args:
             files (array): A array of files and/or folders
         """
+        
+        pl = COVER_CACHE + '/playlist.m3u8'
+
         if files and len(files) > 0:
             startPlay = (self.player.queueList.mediaCount() == 0)
             for file in sorted(files):
@@ -275,6 +272,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
 
             if startPlay:
                 self.player.startPlay()
+        else:
+            if (
+                'saveplaylist' in self.config and
+                self.config['saveplaylist']
+            ):
+                if path.isfile(pl):
+                    self.player.openPlaylist(pl)
+
+        if path.isfile(pl):
+            remove(pl)
 
     def addUrl(self):
         """ Displays the dialog for adding URLs """
