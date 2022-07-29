@@ -70,6 +70,15 @@ You can download a **AppImage** for **GNU/Linux** on [releases page](https://git
 * `--custom-theme`: Use the application's theme instead of using the environment or default Qt theme
 * `-f | --files <files and/or dirs>`: Add files and/or directories for direct playback at startup
 
+### Shortcuts:
+
+* Ctrl+O: Add files
+* Ctrl+D: Add dir
+* Ctrl+U: Add URL
+* Ctrl+P: Open playlist
+* Ctrl+C: Open config dialog
+* Ctrl+Q: Quit
+
 ## Other credits:
 
 * Lüv icons theme: https://github.com/Nitrux/luv-icon-theme

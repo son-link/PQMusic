@@ -21,7 +21,8 @@ from PyQt5.QtGui import (
     QIcon,
     QPixmap,
     QStandardItemModel,
-    QFontDatabase
+    QFontDatabase,
+    QKeySequence
 )
 from os import path, listdir, remove, getcwd
 from sys import exit as sysExit
@@ -78,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.menu
         )
         self.menuAddFiles.triggered.connect(self.addFiles)
+        self.menuAddFiles.setShortcut(QKeySequence('Ctrl+O'))
         self.menu.addAction(self.menuAddFiles)
 
         self.menuAddFolder = QtWidgets.QAction(
@@ -86,6 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.menu
         )
         self.menuAddFolder.triggered.connect(self.addDir)
+        self.menuAddFolder.setShortcut(QKeySequence('Ctrl+D'))
         self.menu.addAction(self.menuAddFolder)
 
         self.menuAddUrl = QtWidgets.QAction(
@@ -94,6 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.menu
         )
         self.menuAddUrl.triggered.connect(self.addUrl)
+        self.menuAddUrl.setShortcut(QKeySequence('Ctrl+U'))
         self.menu.addAction(self.menuAddUrl)
 
         self.menuAddPL = QtWidgets.QAction(
@@ -102,6 +106,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.menu
         )
         self.menuAddPL.triggered.connect(self.player.openPlaylist)
+        self.menuAddPL.setShortcut(QKeySequence('Ctrl+P'))
         self.menu.addAction(self.menuAddPL)
 
         self.menuConfig = QtWidgets.QAction(
@@ -110,6 +115,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.menu
         )
         self.menuConfig.triggered.connect(self.openConfig)
+        self.menuConfig.setShortcut(QKeySequence('Ctrl+C'))
         self.menu.addAction(self.menuConfig)
 
         self.menuButton.setMenu(self.menu)
@@ -207,6 +213,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.tray.setVisible(True)
         self.tray.activated.connect(self.hideShowMW)
 
+        # Quit shortcuts
+        scQuit = QtWidgets.QShortcut(QKeySequence("Ctrl+Q"), self)
+        scQuit.activated.connect(self.closeEvent)
+
         if 'savevolume' in self.config and self.config['savevolume']:
             volume = getSaveVolume()
             self.volumeSlider.setValue(volume)
@@ -254,7 +264,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         Args:
             files (array): A array of files and/or folders
         """
-        
+
         pl = COVER_CACHE + '/playlist.m3u8'
 
         if files and len(files) > 0:
@@ -351,7 +361,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.player.queueList.clear()
         self.clearMetadata()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event=None):
         """ This function is called when closing the main window
             or selecting Exit from the icon menu on the system tray.
 
