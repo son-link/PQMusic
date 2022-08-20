@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.player = Player(self)
         self.plModel = QStandardItemModel()
         self.playlistView.setModel(self.plModel)
-        self.resize_event = False
+        self.layout().setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
         self.setAcceptDrops(True)
         self.config = ConfigDialog.loadConf()
 
@@ -54,7 +54,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
         self.playListFrame.hide()
         self.adjustSize()
         self.blockSignals(False)
-        self.resize_event = True
 
         self.listAddButton.clicked.connect(self.addFiles)
         self.listClearButton.clicked.connect(self.clearPlaylist)
@@ -439,32 +438,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             elif path.isfile(file):
                 self.player.addFile(file)
 
-    def resizeEvent(self, event):
-        """ This function is called when resize the window.
-            Args:
-                event : The resize event
-                    The QStandarItem selected
-        """
-        if self.resize_event:
-            if event.size().height() >= 320:
-                self.playListFrame.show()
-                self.playlistButton.setChecked(True)
-
-            else:
-                self.playListFrame.hide()
-                self.playlistButton.setChecked(False)
-
     def showHidePlaylist(self):
         """ Show/Hide the playlist frame """
-        self.resize_event = False
+        self.layout().setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
 
         if self.playlistButton.isChecked():
             self.playListFrame.show()
         else:
             self.playListFrame.hide()
+            self.layout().setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
 
         QTimer.singleShot(0, self.adjustSize)
-        self.resize_event = True
 
 
 def init(custom_theme=True, files=[]):
