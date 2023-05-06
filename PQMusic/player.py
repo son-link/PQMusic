@@ -212,12 +212,16 @@ class Player(QMediaPlayer):
             if self.player.metaData(QMediaMetaData.AlbumTitle):
                 album = self.player.metaData(QMediaMetaData.AlbumTitle)
                 self.parent.albumLabel.setText(album)
+            else:
+                self.parent.albumLabel.setText(
+                    _translate('MainWindow', 'Unknown')
+                )
 
             release = title
             if album:
                 release = album
 
-            downCoverFile = '{}/{}-{}.jpg'.format(COVER_CACHE, artist, release)
+            downCoverFile = f'{COVER_CACHE}/{artist}-{release}.jpg'
 
             if self.player.metaData(QMediaMetaData.CoverArtImage):
                 cover = self.player.metaData(QMediaMetaData.CoverArtImage)
@@ -262,7 +266,7 @@ class Player(QMediaPlayer):
                     albumId = data['releases'][0]['id']
                     thread = downCover(
                         self.parent, albumId,
-                        '{}/{}-{}.jpg'.format(COVER_CACHE, artist, release)
+                        f'{COVER_CACHE}/{artist}-{release}.jpg'
                     )
                     thread.downloaded.connect(self.setDownCover)
                     thread.start()
@@ -272,10 +276,9 @@ class Player(QMediaPlayer):
                 not self.blockCoverSearch and
                 not path.isfile(downCoverFile)
             ):
-                thread = searchTrackInfo(artist, release)
+                thread = searchTrackInfo(artist, release, self.parent)
                 thread.result.connect(__getcover)
                 thread.start()
-                self.blockCoverSearch = True
 
             if not cover:
                 cover = QPixmap(':/no_cover.svg')
@@ -284,7 +287,7 @@ class Player(QMediaPlayer):
                 )
 
         if artist:
-            trayTooltip = '{} - {}'.format(artist, title)
+            trayTooltip = f'{artist} - {title}'
         else:
             trayTooltip = title
 

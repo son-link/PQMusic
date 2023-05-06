@@ -35,25 +35,30 @@ def getData(url, params=None):
             data = json.loads(rawData)
             return data
     except error.HTTPError:
-        return False
+        return None
 
 
 class searchTrackInfo(QThread):
     result = pyqtSignal(QVariant)
 
-    def __init__(self, artist, release):
-        super().__init__()
+    def __init__(self, artist, release, parent):
+        super().__init__(parent)
         self.params = {
             'fmt': 'json',
-            'query': 'artist:"{}" AND release:"{}"'.format(artist, release)
+            'query': f'artist:"{artist}" AND release:"{release}"'
         }
 
         self.url = 'https://musicbrainz.org/ws/2/release/'
 
     def run(self):
-        data = getData(self.url, self.params)
-        if data:
-            self.result.emit(data)
+        try:
+            data = getData(self.url, self.params)
+            if data:
+                self.result.emit(data)
+        except Exception:
+            self.result.emit({})
+
+        self.result.emit({})
 
 
 class downCover(QThread):
@@ -61,7 +66,7 @@ class downCover(QThread):
 
     def __init__(self, parent, albumId, filename):
         super(downCover, self).__init__(parent)
-        self.url = 'https://coverartarchive.org/release/{}/front-250'.format(albumId)
+        self.url = f'https://coverartarchive.org/release/{albumId}/front-250'
         self.filename = filename
 
     def run(self):

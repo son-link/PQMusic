@@ -221,8 +221,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
             self.volumeSlider.setValue(volume)
 
     def addDir(self):
-        """ Opens the dialog to select a folder to add the supported files inside it,
-            as well as subdirectories.
+        """ Opens the dialog to select a folder to add the supported files
+            inside it, as well as subdirectories.
         """
         folder = QtWidgets.QFileDialog.getExistingDirectory(
             self,
@@ -377,7 +377,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_gui.Ui_MainWindow):
                 saveVolume(self.volumeSlider.value())
 
             if 'saveplaylist' in self.config and self.config['saveplaylist']:
-                saveM3U(self, COVER_CACHE + '/playlist.m3u8', self.player.queueData)
+                saveM3U(
+                    self,
+                    COVER_CACHE + '/playlist.m3u8',
+                    self.player.queueData
+                )
 
             sysExit()
 
