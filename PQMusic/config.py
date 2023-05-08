@@ -50,14 +50,14 @@ class ConfigDialog(QtWidgets.QDialog):
             self.ui.minimizeToTray.setChecked(True)
 
         self.ui.cbDownCover.setChecked(False)
-        if 'sdowncover' in self.config and self.config['downcover'] == 1:
+        if 'downcover' in self.config and self.config['downcover'] == 1:
             self.ui.cbDownCover.setChecked(True)
 
         self.ui.cbSaveVolume.setChecked(False)
         if 'savevolume' in self.config and self.config['savevolume'] == 1:
             self.ui.cbSaveVolume.setChecked(True)
-            
-        self.ui.cbSaveVolume.setChecked(False)
+
+        self.ui.cbSavePlaylist.setChecked(False)
         if 'saveplaylist' in self.config and self.config['saveplaylist'] == 1:
             self.ui.cbSavePlaylist.setChecked(True)
 
@@ -115,7 +115,7 @@ class ConfigDialog(QtWidgets.QDialog):
             cfg.set('pqmusic', 'savevolume', '1')
         else:
             cfg.set('pqmusic', 'savevolume', '0')
-            
+
         if self.ui.cbSavePlaylist.isChecked():
             cfg.set('pqmusic', 'saveplaylist', '1')
         else:
