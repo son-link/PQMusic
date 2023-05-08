@@ -8,7 +8,7 @@ from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from PyQt5 import QtWidgets
 from pathlib import Path
-from .utils import getMetaData, openM3U, saveM3U
+from .utils import getMetaData, openM3U, saveM3U, getTrackerTitle
 from urllib.parse import urlparse
 from os import path, access, R_OK, mkdir, environ, listdir
 from .sys_notify import Notification, init
@@ -65,14 +65,20 @@ class Player(QMediaPlayer):
         if self.checkValidFile(file):
             self.queueList.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
             tags = getMetaData(file)
+            trackerTitle = getTrackerTitle(file)
 
-            if tags['notags']:
+            if trackerTitle:
+                item = QStandardItem(trackerTitle)
+            elif tags['notags']:
                 item = QStandardItem(tags['notags'])
             else:
-                item = QStandardItem('{} - {}'.format(
-                    tags['artist'],
-                    tags['title']
-                ))
+                if tags['artist']:
+                    item = QStandardItem('{} - {}'.format(
+                        tags['artist'],
+                        tags['title']
+                    ))
+                else:
+                    item = QStandardItem(tags['title'])
 
             tags['file'] = file
 
@@ -163,6 +169,18 @@ class Player(QMediaPlayer):
             self.parent.timeSlider.setEnabled(True)
             self.currentTrackDuration = duration
             self.parent.totalTimeLabel.setText(total_time)
+
+        filepath = self.player.currentMedia().canonicalUrl().toString()
+        trackerTitle = getTrackerTitle(filepath)
+        if trackerTitle:
+            self.parent.titleLabel.setText(trackerTitle)
+            self.parent.artistLabel.setText(
+                _translate('MainWindow', 'Unknown')
+            )
+
+            self.parent.albumLabel.setText(
+                _translate('MainWindow', 'Unknown')
+            )
 
     def metaDataChanged(self):
         """ This function is called whenever the metadata changes,

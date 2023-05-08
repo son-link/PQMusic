@@ -13,7 +13,7 @@
 
 PQMusic is a minimalist and easy to use audio player for download and use.
 
-You can play your local files, from a direct url or streaming (for example a online radio) and import/export playlists on M3U format.
+You can play your local files, from a direct url or streaming (for example a online radio) and import/export playlists on M3U format. Also you can play some music trackers files (.it, .mod, .s3m and .xm)
 
 Adding files from Open with on your file manager
 ![Add files from Open with on your file manager](file-manager-menu.png)

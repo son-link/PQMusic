@@ -53,7 +53,9 @@ def getMetaData(filename):
         dict: A dictionary with the metadata
     """
 
+    trackers_extensions = ['s3m', 'xm', 'mod', 'it']
     ext = Path(filename).suffix
+    ext = ext.replace('.', '').lower()
 
     tags = {
         'album':    'Unknown',
@@ -64,7 +66,11 @@ def getMetaData(filename):
 
     info = None
 
-    if ext == '.mp3':
+    if ext in trackers_extensions:
+        tags['title'] = getTrackerTitle(filename, ext)
+        tags['artist'] = ''
+        return tags
+    elif ext == 'mp3':
         info = MP3(filename, ID3=EasyID3)
     else:
         info = File(filename)
@@ -121,10 +127,15 @@ def openM3U(file):
                         track_info = {
                             'duration': duration,
                         }
-                        artist, title = trackname.split(' - ', 1)
-                        track_info['artist'] = artist
-                        track_info['title'] = title
-                        have_info = True
+
+                        if int(duration) > 0:
+                            artist, title = trackname.split(' - ', 1)
+                            track_info['artist'] = artist
+                            track_info['title'] = title
+                            have_info = True
+                        else:
+                            track_info['notags'] = trackname
+                            have_info = True
                     else:
                         have_info = False
                         if Path(line).is_file():
@@ -152,12 +163,15 @@ def saveM3U(self, filename, playlist):
         with open(filename, 'w') as file:
             file.write("#EXTM3U\n")
             for data in playlist:
-                if 'notags' not in data:
-                    file.write("#EXTINF:{},{} - {}\n".format(
-                        data['duration'],
-                        data['artist'],
-                        data['title']
-                    ))
+                if 'notags' not in data or not data['notags']:
+                    if not data['artist']:
+                        file.write(f"#EXTINF:0,{data['title']}\n")
+                    else:
+                        file.write("#EXTINF:{},{} - {}\n".format(
+                            data['duration'],
+                            data['artist'],
+                            data['title']
+                        ))
                 file.write("{}\n".format(data['file']))
             file.close()
     except IOError as x:
@@ -183,3 +197,39 @@ def getSaveVolume():
         f.close()
         remove(volfile)
         return volume
+
+
+def getTrackerTitle(filepath, ext=None):
+    """Return the title of some Music Trackers formats
+
+    Args:
+        filepath (str): the path to the file
+    Return:
+        (str) The title if available or empty string
+    """
+    title = ''
+
+    trackers_extensions = ['s3m', 'xm', 'mod', 'it']
+    filepath = filepath.replace('file://', '')
+
+    if not ext:
+        ext = Path(filepath).suffix
+        ext = ext.replace('.', '').lower()
+        if ext not in trackers_extensions:
+            return ''
+
+    with open(filepath, 'rb') as f:
+        head = f.read(128)
+        if ext == 'xm':
+            title = head[17:37]
+        elif ext == 's3m':
+            title = head[0:28]
+        elif ext == 'mod':
+            title = head[0:20]
+        elif ext == 'it':
+            title = head[4:26]
+
+        title = title.decode('utf-8', 'ignore').strip()
+        fil = filter(str.isprintable, title)
+        title = "".join(fil)
+        return title
