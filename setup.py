@@ -27,7 +27,8 @@ setup(
         'pyqt5',
         'mutagen',
         'python-magic',
-        'psutil'
+        'psutil',
+        'dbus-python'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
