@@ -264,8 +264,9 @@ class Player(QMediaPlayer):
 
             else:
                 # Buscar caratula
+                name = Path(file).stem
                 coverRegex = re.compile(
-                    "(albumartsmall|cover|folder).(jpg|png)",
+                    f"({name}|albumartsmall|cover|folder).(jpg|png)",
                     re.IGNORECASE
                 )
 
@@ -280,7 +281,7 @@ class Player(QMediaPlayer):
                         notifyIcon = coverFile
 
             def __getcover(data):
-                if len(data['releases']) > 0:
+                if 'releases' in data and len(data['releases']) > 0:
                     albumId = data['releases'][0]['id']
                     thread = downCover(
                         self.parent, albumId,
