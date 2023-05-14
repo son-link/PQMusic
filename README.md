@@ -37,9 +37,9 @@ Licensed under GNU/GPL3 or higher.
 * Install the dependencies:
   * **From PIP** (with administration permissions): `pip install -r requirements.txt`
   * **Debian/Ubuntu/Mint/MX Linux**:
-    * apt: `apt install python3-pyqt5 python3-pyqt5.qtmultimedia libqt5multimedia5 libqt5multimedia5-plugins qtgstreamer-plugins-qt5 gstreamer1.0-plugins-bad python3-mutagen python3-magic python3-dbus`
+    * apt: `apt install python3-pyqt5 python3-pyqt5.qtmultimedia libqt5multimedia5 libqt5multimedia5-plugins qtgstreamer-plugins-qt5 python3-mutagen python3-magic python3-dbus python3-requests`
   * **Arch Linux/Manjaro**:
-    * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia python-mutagen python-magic dbus-python`
+    * pacman: `python-pip python-mutagen python-pyqt5 qt5-multimedia python-mutagen python-magic dbus-python python-requests`
 
   * Copy the icon and desktop file:
     * All users:

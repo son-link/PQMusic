@@ -28,7 +28,8 @@ setup(
         'mutagen',
         'python-magic',
         'psutil',
-        'dbus-python'
+        'dbus-python',
+        'requests'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

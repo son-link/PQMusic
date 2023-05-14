@@ -3,3 +3,4 @@ mutagen
 python-magic
 psutil
 dbus-python
+requests
