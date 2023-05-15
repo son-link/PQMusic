@@ -265,6 +265,7 @@ class Player(QMediaPlayer):
             else:
                 # Buscar caratula
                 name = Path(file).stem
+                name = re.escape(name)
                 coverRegex = re.compile(
                     f"({name}|albumartsmall|cover|folder).(jpg|png)",
                     re.IGNORECASE
