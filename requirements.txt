@@ -2,5 +2,4 @@ pyqt5
 mutagen
 python-magic
 psutil
-dbus-python
 requests
