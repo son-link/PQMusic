@@ -10,6 +10,7 @@ from os import (
     environ,
 )
 from os.path import isfile
+from PyQt5 import QtDBus, QtCore
 import psutil
 
 LOCKFILE = '/tmp/pqmusic.lock'
@@ -233,3 +234,33 @@ def getTrackerTitle(filepath, ext=None):
         fil = filter(str.isprintable, title)
         title = "".join(fil)
         return title
+
+
+def notify(title, body='', icon='', timeout=-1):
+    item = "org.freedesktop.Notifications"
+    path = "/org/freedesktop/Notifications"
+    interface = "org.freedesktop.Notifications"
+    app_name = "pqmusic"
+    v = QtCore.QVariant(417598)  # random int to identify all notifications
+
+    if v.convert(QtCore.QVariant.UInt):
+        id_replace = v
+
+    actions_list = QtDBus.QDBusArgument([], QtCore.QMetaType.QStringList)
+    hint = {}
+
+    bus = QtDBus.QDBusConnection.sessionBus()
+    if not bus.isConnected():
+        print("Not connected to dbus!")
+
+    notify = QtDBus.QDBusInterface(item, path, interface, bus)
+
+    if notify.isValid():
+        x = notify.call(QtDBus.QDBus.AutoDetect, "Notify", app_name,
+                        id_replace, icon, title, body,
+                        actions_list, hint, timeout)
+        if x.errorName():
+            print("Failed to send notification!")
+            print(x.errorMessage(), x.errorName())
+    else:
+        print("Invalid dbus interface")

@@ -8,10 +8,9 @@ from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from PyQt5 import QtWidgets
 from pathlib import Path
-from .utils import getMetaData, openM3U, saveM3U, getTrackerTitle
+from .utils import getMetaData, openM3U, saveM3U, getTrackerTitle, notify
 from urllib.parse import urlparse
 from os import path, access, R_OK, mkdir, environ, listdir
-from .sys_notify import Notification, init
 from .covers import searchTrackInfo, downCover
 
 import magic
@@ -51,8 +50,6 @@ class Player(QMediaPlayer):
         self.prevPosition = -1
         self.volume = 100
         self.blockCoverSearch = False
-
-        init('pqmusic')
 
         self.player.mediaStatusChanged.connect(self.qmp_mediaStatusChanged)
         self.player.metaDataChanged.connect(self.metaDataChanged)
@@ -316,13 +313,13 @@ class Player(QMediaPlayer):
             self.parent.tray.setToolTip(trayTooltip)
 
             if self.parent.config['shownotify']:
-                n = Notification(
+                notify(
                     'PQMusic',
                     trayTooltip,
                     notifyIcon,
                     timeout=3000
                 )
-                n.show()
+
 
     def openPlaylist(self, file=None):
         """ Opens the dialog to select files to add """
