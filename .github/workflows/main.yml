@@ -25,7 +25,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update && sudo apt-get install -yq fuse libdbus-1-dev
+          sudo apt clean 
+          sudo apt update && sudo apt-get install -yq fuse libdbus-1-dev --fix-missing
 
       - name: Create AppImage
         run: |
