@@ -18,7 +18,9 @@ setup(
             'build-appimage.sh',
             'build/',
             'dist/',
-            'icons/luv-icon-theme'
+            'icons/luv-icon-theme',
+            'packages/'
+            'icons/'
         ]
     },
     download_url='https://github.com/son-link/PQMusic/archive/refs/tags/v.1.3.0.tar.gz',
