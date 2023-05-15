@@ -460,6 +460,7 @@ def init(custom_theme=True, files=[]):
 
     app = QtWidgets.QApplication([])
     app.setQuitOnLastWindowClosed(False)
+    app.setDesktopFileName('pqmusic')
     defaultLocale = QLocale.system().name()
     if defaultLocale.startswith('es_'):
         defaultLocale = 'es'
