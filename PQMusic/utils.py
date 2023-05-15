@@ -12,9 +12,11 @@ from os import (
 from os.path import isfile
 from PyQt5 import QtDBus, QtCore
 import psutil
+from random import randint
 
 LOCKFILE = '/tmp/pqmusic.lock'
 COVER_CACHE = environ['HOME'] + '/.cache/pqmusic'
+last_notify_body = ''
 
 
 def delLockFile():
@@ -237,11 +239,20 @@ def getTrackerTitle(filepath, ext=None):
 
 
 def notify(title, body='', icon='', timeout=-1):
+    global last_notify_body
+    # Prevent send many notifications
+    if body == last_notify_body:
+        return
+
+    last_notify_body = body
+
     item = "org.freedesktop.Notifications"
     path = "/org/freedesktop/Notifications"
     interface = "org.freedesktop.Notifications"
     app_name = "pqmusic"
-    v = QtCore.QVariant(417598)  # random int to identify all notifications
+
+    # random int to identify all notifications
+    v = QtCore.QVariant(randint(1000, 10000))
 
     if v.convert(QtCore.QVariant.UInt):
         id_replace = v
