@@ -1,6 +1,7 @@
 from mutagen import File
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
+from mutagen.easymp4 import EasyMP4
 from pathlib import Path
 from os import (
     access,
@@ -75,6 +76,8 @@ def getMetaData(filename):
         return tags
     elif ext == 'mp3':
         info = MP3(filename, ID3=EasyID3)
+    elif ext == 'm4a':
+        info = EasyMP4(filename)
     else:
         info = File(filename)
 

@@ -1,3 +1,7 @@
+from urllib.parse import urlparse
+from os import path, access, R_OK, mkdir, environ, listdir
+from pathlib import Path
+
 from PyQt5.QtMultimedia import (
     QMediaPlayer,
     QMediaPlaylist,
@@ -7,10 +11,8 @@ from PyQt5.QtMultimedia import (
 from PyQt5.QtCore import QUrl, QCoreApplication, QSize, Qt
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItem
 from PyQt5 import QtWidgets
-from pathlib import Path
 from .utils import getMetaData, openM3U, saveM3U, getTrackerTitle, notify
-from urllib.parse import urlparse
-from os import path, access, R_OK, mkdir, environ, listdir
+
 from .covers import searchTrackInfo, downCover
 
 import magic
@@ -121,7 +123,7 @@ class Player(QMediaPlayer):
             self.player.play()
 
     def checkValidFile(self, file):
-        """ Check if the file is a valid audio file.
+        """ Check if the file is a valid audio file or m4a.
             Args:
                 file : str
                     Path to the file
@@ -130,8 +132,12 @@ class Player(QMediaPlayer):
         """
         if access(file, R_OK):
             f = magic.Magic(mime=True)
-
-            if f.from_file(file).startswith('audio'):
+            mimetype = f.from_file(file)
+            _, extension = path.splitext(file)
+            if (
+                mimetype.startswith('audio') or
+                (mimetype == 'video/mp4' and extension == '.m4a')
+            ):
                 return True
 
         return False
@@ -319,7 +325,6 @@ class Player(QMediaPlayer):
                     notifyIcon,
                     timeout=3000
                 )
-
 
     def openPlaylist(self, file=None):
         """ Opens the dialog to select files to add """
