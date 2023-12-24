@@ -10,7 +10,7 @@ from os import (
     remove,
     environ,
 )
-from os.path import isfile
+from os.path import isfile, dirname
 from PyQt5 import QtDBus, QtCore
 import psutil
 from random import randint
@@ -110,6 +110,7 @@ def openM3U(file):
 
     tracks = []
     if Path(file).is_file() and access(file, R_OK):
+        folder = dirname(file)
         with open(file, encoding='utf-8', errors="ignore") as m3u:
             have_info = False
             track_info = {
@@ -143,6 +144,7 @@ def openM3U(file):
                             track_info['notags'] = trackname
                             have_info = True
                     else:
+                        line = line if line.startswith('/') else f'{folder}/{line}'
                         have_info = False
                         if Path(line).is_file():
                             track_info['notags'] = Path(line).stem
@@ -151,6 +153,7 @@ def openM3U(file):
                         track_info = {}
                 else:
                     have_info = False
+                    line = line if line.startswith('/') else f'{folder}/{line}'
                     if Path(line).is_file():
                         track_info['file'] = line
                         tracks.append(track_info)
