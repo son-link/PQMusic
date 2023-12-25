@@ -14,8 +14,8 @@ chmod +x linuxdeploy-${ARCH}.AppImage linuxdeploy-plugin-conda.sh appimagetool-$
 
 # Set Environment
 export CONDA_CHANNELS='local;conda-forge'
-export PIP_REQUIREMENTS='pyqt5 mutagen python-magic psutil .'
-install -Dm644 bin/io.sonlink.pqmusic.png AppDir/usr/share/icons/pqmusic.png
+export PIP_REQUIREMENTS='PyQt5 mutagen python-magic psutil .'
+# install -Dm644 bin/io.sonlink.pqmusic.png AppDir/usr/share/icons/pqmusic.png
 install -Dm644 bin/io.sonlink.pqmusic.appdata.xml AppDir/usr/share/metainfo/io.sonlink.pqmusic.appdata.xml
 # Deploy
 ./linuxdeploy-x86_64.AppImage \
