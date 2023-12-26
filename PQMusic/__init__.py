@@ -460,7 +460,7 @@ def init(custom_theme=True, files=[]):
 
     app = QtWidgets.QApplication([])
     app.setQuitOnLastWindowClosed(False)
-    app.setDesktopFileName('pqmusic')
+    app.setDesktopFileName('io.sonlink.pqmusic')
     defaultLocale = QLocale.system().name()
     if defaultLocale.startswith('es_'):
         defaultLocale = 'es'
@@ -478,7 +478,8 @@ def init(custom_theme=True, files=[]):
         searchPaths = QIcon.fallbackSearchPaths()
         searchPaths.append(':/icons')
         QIcon.setFallbackSearchPaths(searchPaths)
-        QIcon.setThemeName('luv')
+        # QIcon.setThemeName('luv')
+        QIcon.setThemeName('material')
 
     window = MainWindow()
     window.addFilesFromArgs(files)
